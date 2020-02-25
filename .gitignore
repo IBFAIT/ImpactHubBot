@@ -1,3 +1,5 @@
 .idea/
 ImpactHub_bot.iml
 target/
+tokens/
+src/main/resources/credentials.json
