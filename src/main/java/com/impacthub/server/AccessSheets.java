@@ -22,7 +22,7 @@ public class AccessSheets {
 
     private static Sheets sheetsService;
     private static String APPLICATION_NAME = "Google Sheets Example";
-    private static String SPREADSHEET_ID = "1lRMtnii4Ys7q_UzNLPkA86fVcXhYkznl6SGvuOpn4SM";
+    private static String SPREADSHEET_ID = "1lRMtnii4Ys7q_UzNLPkA86fVcXhYkznl6SGvuOpn4SM";  // Set you SheetId
 
     public static Credential authorize() throws IOException, GeneralSecurityException {
         InputStream in = AccessSheets.class.getResourceAsStream("/credentials.json");

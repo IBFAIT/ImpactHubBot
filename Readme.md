@@ -53,3 +53,14 @@ Date : 25/02/2020
 	 			2) updateUserMembership : It'll update the IH-Membership of a particular User.
 				Note : Curently the arguments to these funtions have been harcoded. 
 
+
+
+Date : 26/02/2020
+
+### Functionality Upgrade ###
+
+	Implemented new functionality so that :
+
+ 	1) TestBot can now ask Users for their ContactNumbers and store it in the Applicaiton(not DB persistent)
+	2) TestBot can also ask Users for their Location and store it in the Application(not DB persistent)
+

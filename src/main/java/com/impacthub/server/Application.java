@@ -19,12 +19,13 @@ public class Application {
             e.printStackTrace();
         }
 
-        try {
+        // Uncomment to work with Sheets
+        /*try {
             AccessSheets.connect();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
