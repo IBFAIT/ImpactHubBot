@@ -14,6 +14,7 @@ public class Application {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
             telegramBotsApi.registerBot(new TestBot());
+            telegramBotsApi.registerBot(new GatewayBot());
 
         } catch (TelegramApiException e) {
             e.printStackTrace();

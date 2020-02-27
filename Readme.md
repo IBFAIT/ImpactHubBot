@@ -64,3 +64,10 @@ Date : 26/02/2020
  	1) TestBot can now ask Users for their ContactNumbers and store it in the Applicaiton(not DB persistent)
 	2) TestBot can also ask Users for their Location and store it in the Application(not DB persistent)
 
+
+Date : 27/02/2020
+
+### Functionality Upgrade ###
+
+	Created ImpactHub GateWay bot :- Provides a list of options to the User.
+	Implementation is in progress.
