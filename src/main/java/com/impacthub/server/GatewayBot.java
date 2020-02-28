@@ -8,6 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class GatewayBot extends TelegramLongPollingBot {
                     break;
 
             }
-        }catch (TelegramApiException e){
+        }catch (TelegramApiException | IOException | GeneralSecurityException e){
             e.printStackTrace();
         }
     }
@@ -95,18 +97,25 @@ public class GatewayBot extends TelegramLongPollingBot {
         keyboardButton3.setText("Buy an ImpactHub membership.");
         keyboardThirdRow.add(keyboardButton3);
 
-
         keyboard.add(keyboardFirstRow);
         keyboard.add(keyboardSecondRow);
         keyboard.add(keyboardThirdRow);
         replyKeyboardMarkup.setKeyboard(keyboard);
-
     }
 
-    public void joinMainGroup(Update update) throws TelegramApiException {
-        execute(new SendMessage()
-                .setChatId(update.getMessage().getChatId())
-                .setText("Processing main chat joining request"));
+    public void joinMainGroup(Update update) throws TelegramApiException, IOException, GeneralSecurityException {
+        if (AccessSheets.validateByTelegramId(update.getMessage().getFrom().getId()) != null) {
+            execute(new SendMessage()
+                    .setChatId(update.getMessage().getChatId())
+                    .setText("Authorization Successful.\n" +
+                            "Click on the link below to join the chat group\n" +
+                            "https://t.me/joinchat/M9ncJR0-TljkE4Hm_dnmfw"));
+        }
+        else{
+            execute(new SendMessage()
+                    .setChatId(update.getMessage().getChatId())
+                    .setText("Unauthorized"));
+        }
     }
 
     public void joinSupportGroup(Update update) throws TelegramApiException {
@@ -120,5 +129,4 @@ public class GatewayBot extends TelegramLongPollingBot {
                 .setChatId(update.getMessage().getChatId())
                 .setText("Processing purchase membership request"));
     }
-
 }

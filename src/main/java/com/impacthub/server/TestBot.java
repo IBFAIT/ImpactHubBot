@@ -53,11 +53,11 @@ public class TestBot extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return "thinkitive_TestBot";
+        return "ih_test_bot";
     }
 
     public String getBotToken() {
-        return "1057939283:AAGbOkTBBnN4iC3m50OFGjcOcTnyrACOLNI";
+        return "1136616927:AAF42Re7xvASO_tjMIpNCvud7bgvuX1nXSQ";
     }
 
     public void sendMessage(Update update) throws TelegramApiException {
@@ -143,6 +143,7 @@ public class TestBot extends TelegramLongPollingBot {
             }
         }
     }
+
     public void getLocation(Update update) throws TelegramApiException{
 
         execute(new SendMessage()

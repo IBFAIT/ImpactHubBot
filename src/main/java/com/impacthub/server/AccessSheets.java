@@ -23,6 +23,7 @@ public class AccessSheets {
     private static Sheets sheetsService;
     private static String APPLICATION_NAME = "Google Sheets Example";
     private static String SPREADSHEET_ID = "1lRMtnii4Ys7q_UzNLPkA86fVcXhYkznl6SGvuOpn4SM";  // Set you SheetId
+    private static List<List<Object>> values;
 
     public static Credential authorize() throws IOException, GeneralSecurityException {
         InputStream in = AccessSheets.class.getResourceAsStream("/credentials.json");
@@ -53,68 +54,60 @@ public class AccessSheets {
                 .build();
     }
 
-    public static void connect() throws IOException, GeneralSecurityException {
+    public static List<List<Object>> connect() throws IOException, GeneralSecurityException {
         sheetsService = getSheetsService();
-
         String range = "Users";             // For reading entire sheet
 
         ValueRange response = sheetsService.spreadsheets().values()
                 .get(SPREADSHEET_ID, range)
                 .execute();
 
-        List<List<Object>> values = response.getValues();
-
-        // Temporarily Hardcoding phoneNumber
-        String number = "41793542420";
-        String flag = "TRUE";
-
-        // Function calls
-        fetchWithNumber(values, number);
-        fetchWithAdminFlag(values,flag);
-        writeUserToSheet();
-        updateUserMembership(values, "34422");
-
+        values = response.getValues();
+        return  values;
     }
 
-    public static void fetchWithNumber(List<List<Object>> values, String number) {
+    public static void fetchWithNumber(String number) throws IOException, GeneralSecurityException {
         //  number = "41793542420";     // For dynamically call
+        values = connect();
 
         String pattern = "[^0-9]";
         for (List row : values) {
-            if (row.get(4)
+            if (row.get(5)
                     .toString()
                     .replaceAll(pattern, "")
                     .equals(number)){
-                System.out.println("The record with number "+number+
-                        " is \nFirstName: "+row.get(1)+
-                        ", LastName: "+row.get(2)+
-                        ", Email: "+row.get(3)+
-                        ", BlockedFlag: "+row.get(9));
+                System.out.println("\nThe record with number "+number+
+                        " is \nFirstName: "+row.get(2)+
+                        ", LastName: "+row.get(3)+
+                        ", Email: "+row.get(4)+
+                        ", BlockedFlag: "+row.get(10));
             }
         }
     }
 
-    public static void fetchWithAdminFlag(List<List<Object>> values, String flag) {
-       // flag = "TRUE";        // For dynamic call
+    public static void fetchWithAdminFlag(String flag) throws IOException, GeneralSecurityException {
+        // flag = "TRUE";        // For dynamic call
+        values = connect();
 
         System.out.println("\nRecords with Admin FLag set : ");
         for (List row : values) {
-            if (row.get(8).toString().equals(flag)){
-                System.out.println(("FirstName: "+row.get(1)+
-                        ", LastName: "+row.get(2)+
-                        ", Email: " + row.get(3)+
-                        ", BlockedFlag: "+row.get(9)+
-                        ", PhoneNumber: "+row.get(4)));
+            if (row.get(9).toString().equals(flag)){
+                System.out.println(("FirstName: "+row.get(2)+
+                        ", LastName: "+row.get(3)+
+                        ", Email: " + row.get(4)+
+                        ", BlockedFlag: "+row.get(10)+
+                        ", PhoneNumber: "+row.get(5)));
             }
         }
     }
 
-    public static void writeUserToSheet() throws IOException {
+    public static void writeUserToSheet() throws IOException, GeneralSecurityException {
+        values = connect();
 
         // Hardcoding data temporarily
         ValueRange appendBody = new ValueRange()
                 .setValues(Arrays.asList(
-                        Arrays.asList("34426","Carl","Smith","carlsmith@gmail.com","+41793542720","@wickedcarl",
+                        Arrays.asList("123456789","34426","Carl","Smith","carlsmith@gmail.com","+41793542720","@wickedcarl",
                                 "Corporate","","TRUE","TRUE")
                 ));
 
@@ -126,8 +119,8 @@ public class AccessSheets {
                 .execute();
     }
 
-    public static void updateUserMembership(List<List<Object>> values, String ih_id) throws IOException {
-
+    public static void updateUserMembership(String ih_id) throws IOException, GeneralSecurityException {
+        values = connect();
         int rowcount = 1;
         // ih_id = "34423" ;        // for dynamic call
 
@@ -139,7 +132,7 @@ public class AccessSheets {
 
         // Finding the User by ih_id
         for (List row : values) {
-            if (row.get(0).toString().equals(ih_id)){
+            if (row.get(1).toString().equals(ih_id)){
                 break;
             }
             rowcount++;
@@ -153,4 +146,16 @@ public class AccessSheets {
                 .execute();
     }
 
+    public static List validateByTelegramId(Integer telegram_id) throws IOException, GeneralSecurityException {
+
+        values = connect();
+        for (List row : values) {
+            if (row.get(0)
+                    .toString()
+                    .equals(telegram_id.toString())){
+                return row;
+            }
+        }
+        return null;
+    }
 }

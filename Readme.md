@@ -18,7 +18,7 @@ Date : 25/02/2020
 ### How to interact with the bot ###
 
 1. Run the project (see above steps).
-2. Search for thinkitive_TestBot in Telegram
+2. Search for IH_TestBot(@ih_test_bot) in Telegram
 3. Send any message to the bot and an acknowledgement from the Application will be recieved
 	Additionally
 	-- /myname command will display full name of the user interacting with the bot (The name will be displayed on the application console where the project is running)
@@ -71,3 +71,10 @@ Date : 27/02/2020
 
 	Created ImpactHub GateWay bot :- Provides a list of options to the User.
 	Implementation is in progress.
+	
+
+Date : 28/02/2020
+
+### Functionality Upgrade ###
+    Gateway Bot now can be searched(IH_Gateway_bot) & interacted with.
+    User can join the main group after authorization (Users telegram ID should exist in the DB)

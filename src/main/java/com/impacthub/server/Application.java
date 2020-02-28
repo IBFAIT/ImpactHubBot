@@ -16,17 +16,15 @@ public class Application {
             telegramBotsApi.registerBot(new TestBot());
             telegramBotsApi.registerBot(new GatewayBot());
 
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+            AccessSheets.fetchWithAdminFlag("TRUE");
+            AccessSheets.fetchWithNumber("41793542720");
 
-        // Uncomment to work with Sheets
-        /*try {
-            AccessSheets.connect();
-        } catch (IOException e) {
+        } catch (TelegramApiException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
-        }*/
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

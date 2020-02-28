@@ -61,6 +61,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegramapi</artifactId>
+            <version>66.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
