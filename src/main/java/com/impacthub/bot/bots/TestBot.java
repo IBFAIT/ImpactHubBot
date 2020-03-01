@@ -1,4 +1,4 @@
-package com.impacthub.server;
+package com.impacthub.bot.bots;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,9 +15,20 @@ import java.util.List;
 
 public class TestBot extends TelegramLongPollingBot {
 
+    private String botToken;
+    private String botUsername;
+
+    public void setBotToken(String botToken) {
+        this.botToken = botToken;
+    }
+
+    public void setBotUsername(String botUsername) {
+        this.botUsername = botUsername;
+    }
+
     public void onUpdateReceived(Update update) {
 
-        if(update.getMessage().getContact() != null) {
+        if (update.getMessage().getContact() != null) {
             Contact contact = update.getMessage().getContact();
             System.out.println(contact);
             try {
@@ -27,7 +38,7 @@ public class TestBot extends TelegramLongPollingBot {
             }
         }
 
-        if(update.getMessage().getLocation() != null) {
+        if (update.getMessage().getLocation() != null) {
             Location location = update.getMessage().getLocation();
             System.out.println(location);
 
@@ -41,10 +52,10 @@ public class TestBot extends TelegramLongPollingBot {
         }
 
         try {
-            if(update.getMessage().getText().equals("/start")){
+            if (update.getMessage().getText().equals("/start")) {
                 greet(update);
             }
-            if(update.getMessage().getText().equals("Yes")){
+            if (update.getMessage().getText().equals("Yes")) {
                 getContact(update);
             }
         } catch (TelegramApiException e) {
@@ -53,11 +64,11 @@ public class TestBot extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return "ih_test_bot";
+        return botUsername;
     }
 
     public String getBotToken() {
-        return "1136616927:AAF42Re7xvASO_tjMIpNCvud7bgvuX1nXSQ";
+        return botToken;
     }
 
     public void sendMessage(Update update) throws TelegramApiException {
@@ -67,12 +78,12 @@ public class TestBot extends TelegramLongPollingBot {
         execute(message);
     }
 
-    public void greet(Update update) throws TelegramApiException{
+    public void greet(Update update) throws TelegramApiException {
 
-        if(update.hasMessage() && update.getMessage().hasText()){
+        if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage message = new SendMessage();
             StringBuilder msgBuilder = new StringBuilder();
-            msgBuilder.append("Greetings "+update.getMessage().getFrom().getFirstName()+" !");
+            msgBuilder.append("Greetings ").append(update.getMessage().getFrom().getFirstName()).append(" !");
             msgBuilder.append("\n Please connect with us by sharing your contact number.");
             message.setText(String.valueOf(msgBuilder));
             setButtons(message);
@@ -110,9 +121,9 @@ public class TestBot extends TelegramLongPollingBot {
         replyKeyboardMarkup.setKeyboard(keyboard);
     }
 
-    public void getContact(Update update){
+    public void getContact(Update update) {
 
-        if(update.getMessage().getText().equals("Yes")){
+        if (update.getMessage().getText().equals("Yes")) {
             long chat_id = update.getMessage().getChatId();
 
             SendMessage sendMessage = new SendMessage()
@@ -144,7 +155,8 @@ public class TestBot extends TelegramLongPollingBot {
         }
     }
 
-    public void getLocation(Update update) throws TelegramApiException{
+
+    public void getLocation(Update update) throws TelegramApiException {
 
         execute(new SendMessage()
                 .setChatId(update.getMessage().getChatId())
