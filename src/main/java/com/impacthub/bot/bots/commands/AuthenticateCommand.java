@@ -58,6 +58,5 @@ public class AuthenticateCommand extends BotCommand {
             //todo refactor
             System.out.println("e = " + e);
         }
-
     }
 }

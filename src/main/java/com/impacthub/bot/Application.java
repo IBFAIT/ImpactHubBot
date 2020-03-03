@@ -23,6 +23,5 @@ public class Application {
             LongPollingBot bot = (LongPollingBot) obj;
             telegramBotsApi.registerBot(bot);
         }
-
     }
 }
