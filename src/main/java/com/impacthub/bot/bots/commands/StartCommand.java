@@ -1,6 +1,7 @@
 package com.impacthub.bot.bots.commands;
 
-import org.telegram.bot.services.BotLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.ICommandRegistry;
@@ -10,14 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-/**
- * This commands starts the conversation with the bot
- *
- * @author Timo Schulz (Mit0x2)
- */
 public class StartCommand extends BotCommand {
 
-    public static final String LOGTAG = "STARTCOMMAND";
+    private static final Logger LOGGER = LoggerFactory.getLogger(StartCommand.class);
     private final ICommandRegistry commandRegistry;
 
     public StartCommand(ICommandRegistry commandRegistry) {
@@ -51,7 +47,7 @@ public class StartCommand extends BotCommand {
         try {
             absSender.execute(answer);
         } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
+            LOGGER.error("Error while executing Start command.", e);
         }
     }
 

@@ -30,7 +30,6 @@ public class TestBot extends TelegramLongPollingBot {
 
         if (update.getMessage().getContact() != null) {
             Contact contact = update.getMessage().getContact();
-            System.out.println(contact);
             try {
                 getLocation(update);
             } catch (TelegramApiException e) {
@@ -40,7 +39,6 @@ public class TestBot extends TelegramLongPollingBot {
 
         if (update.getMessage().getLocation() != null) {
             Location location = update.getMessage().getLocation();
-            System.out.println(location);
 
             try {
                 execute(new SendMessage()

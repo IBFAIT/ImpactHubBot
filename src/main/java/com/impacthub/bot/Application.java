@@ -11,17 +11,32 @@ import java.util.List;
 
 public class Application {
 
-    public static void main(String[] args) throws TelegramApiRequestException {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
-        ApiContextInitializer.init();
-        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+    public static void main(String[] args) {
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
-        List bots = (List) context.getBean("bots");
+        LOGGER.info("Starting bot ...");
 
-        for (Object obj : bots) {
-            LongPollingBot bot = (LongPollingBot) obj;
-            telegramBotsApi.registerBot(bot);
+        try {
+            ApiContextInitializer.init();
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+
+            ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+            List bots = (List) context.getBean("bots");
+
+            for (Object obj : bots) {
+                LongPollingBot bot = (LongPollingBot) obj;
+                try {
+                    telegramBotsApi.registerBot(bot);
+                } catch (TelegramApiRequestException e) {
+                    LOGGER.error("Error while registering Bot.", e);
+                }
+            }
+
+            LOGGER.info("Bot started.");
+        } catch (Exception e) {
+            LOGGER.error("Error while starting Bot.", e);
         }
     }
+
 }

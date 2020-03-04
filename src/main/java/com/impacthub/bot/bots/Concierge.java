@@ -7,7 +7,8 @@ import com.impacthub.bot.bots.commands.StartCommand;
 import com.impacthub.bot.bots.commands.util.DefaultAction;
 import com.impacthub.bot.services.ServiceException;
 import com.impacthub.bot.services.authorisation.AuthorisationService;
-import org.telegram.bot.services.BotLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.ApiContext;
@@ -18,13 +19,17 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Concierge extends TelegramLongPollingCommandBot {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Concierge.class);
+    private String botUsername;
     private String botToken;
 
-    private AuthorisationService authorisationService;
+    private AuthorisationService authService;
 
-    public Concierge(String botToken) {
+    public Concierge(String botUsername, String botToken) {
         super(ApiContext.getInstance(DefaultBotOptions.class));
 
+        this.botUsername = botUsername;
         this.botToken = botToken;
 
         HelpCommand helpCommand = new HelpCommand(this);
@@ -37,12 +42,8 @@ public class Concierge extends TelegramLongPollingCommandBot {
         registerDefaultAction(new DefaultAction(helpCommand));
     }
 
-    public void setBotToken(String botToken) {
-        this.botToken = botToken;
-    }
-
-    public void setAuthorisationService(AuthorisationService authorisationService) {
-        this.authorisationService = authorisationService;
+    public void setAuthorisationService(AuthorisationService authService) {
+        this.authService = authService;
     }
 
     public String getBotUsername() {
@@ -55,11 +56,13 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
     @Override
     public void processNonCommandUpdate(Update update) {
-        log(update);
-        Message message = update.getMessage();
-        processTextMessage(message);
-        //todo: should be refactored to AuthenticationCommand or somewhere else
-        processContactMessage(message);
+        if (update.hasMessage()) {
+            Message message = update.getMessage();
+
+            //TODO: should be refactored to AuthenticationCommand or somewhere else
+            processTextMessage(message);
+            processContactMessage(message);
+        }
     }
 
     private void log(Update update) {
@@ -97,7 +100,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
         String messageText = "Thank you. Your phone number is " + contact.getPhoneNumber();
 
         try {
-            boolean authorised = authorisationService.isAuthorised(contact.getPhoneNumber());
+            boolean authorised = authService.isAuthorised(contact.getPhoneNumber());
             if (authorised) {
                 messageText += ". You're authorised to join our groups.";
             } else {
@@ -107,10 +110,13 @@ public class Concierge extends TelegramLongPollingCommandBot {
             SendMessage contactMessage = new SendMessage(
                     message.getChatId(),
                     messageText);
+
             execute(contactMessage);
-        } catch (TelegramApiException | ServiceException e) {
-            //todo refactor
-            e.printStackTrace();
+            LOGGER.info("Sent message : '{}' to Phone : {}", messageText, contact.getPhoneNumber());
+        } catch (TelegramApiException e) {
+            LOGGER.error("Error while sending response after receiving contact number : {}", contact.getPhoneNumber(), e);
+        } catch (ServiceException e) {
+            LOGGER.error("Error while authorising by contact number : {}", contact.getPhoneNumber(), e);
         }
     }
 
@@ -128,4 +134,5 @@ public class Concierge extends TelegramLongPollingCommandBot {
             BotLogger.error("foo", e);
         }
     }
+
 }

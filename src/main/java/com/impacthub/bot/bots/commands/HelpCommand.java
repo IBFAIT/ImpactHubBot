@@ -1,6 +1,7 @@
 package com.impacthub.bot.bots.commands;
 
-import org.telegram.bot.services.BotLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.ICommandRegistry;
@@ -10,15 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-/**
- * This command helps the user to find the command they need
- *
- * @author Timo Schulz (Mit0x2)
- */
 public class HelpCommand extends BotCommand {
 
-    private static final String LOGTAG = "HELPCOMMAND";
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(HelpCommand.class);
     private final ICommandRegistry commandRegistry;
 
     public HelpCommand(ICommandRegistry commandRegistry) {
@@ -44,7 +39,7 @@ public class HelpCommand extends BotCommand {
         try {
             absSender.execute(helpMessage);
         } catch (TelegramApiException e) {
-            BotLogger.error(LOGTAG, e);
+            LOGGER.error("Error while executing Help command.", e);
         }
     }
 }
