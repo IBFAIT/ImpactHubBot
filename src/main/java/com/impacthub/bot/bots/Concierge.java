@@ -27,12 +27,11 @@ public class Concierge extends TelegramLongPollingCommandBot {
     private String botUsername;
     private String botToken;
 
-    private AuthorisationService authService;
+    private AuthorisationService authorisationService;
 
-    public Concierge(String botUsername, String botToken) {
+    public Concierge(String botToken) {
         super(ApiContext.getInstance(DefaultBotOptions.class));
 
-        this.botUsername = botUsername;
         this.botToken = botToken;
 
         HelpCommand helpCommand = new HelpCommand(this);
@@ -47,7 +46,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
     }
 
     public void setAuthorisationService(AuthorisationService authService) {
-        this.authService = authService;
+        this.authorisationService = authService;
     }
 
     public String getBotUsername() {
@@ -69,6 +68,34 @@ public class Concierge extends TelegramLongPollingCommandBot {
         }
     }
 
+    private void log(Update update) {
+        System.out.println("************************************************************");
+        System.out.println("update = " + update);
+        System.out.println("update.getUpdateId() = " + update.getUpdateId());
+        System.out.println("update.getChannelPost() = " + update.getChannelPost());
+        System.out.println("update.getCallbackQuery() = " + update.getCallbackQuery());
+        System.out.println("update.getMessage() = " + update.getMessage());
+        System.out.println("update.getChosenInlineQuery() = " + update.getChosenInlineQuery());
+
+        if (update.hasMessage()) {
+            Message message = update.getMessage();
+            System.out.println("message = " + message);
+            System.out.println("message.getFrom() = " + message.getFrom());
+            System.out.println("message.getChat() = " + message.getChat());
+            System.out.println("message.getText() = " + message.getText());
+            System.out.println("message.getAuthorSignature() = " + message.getAuthorSignature());
+            System.out.println("message.getCaption() = " + message.getCaption());
+            System.out.println("message.getConnectedWebsite() = " + message.getConnectedWebsite());
+            System.out.println("message.getChatId() = " + message.getChatId());
+            System.out.println("message.getDocument() = " + message.getDocument());
+            System.out.println("message.getNewChatMembers() = " + message.getNewChatMembers());
+            System.out.println("message.getLeftChatMember() = " + message.getLeftChatMember());
+            System.out.println("message.isUserMessage() = " + message.isUserMessage());
+        }
+
+        System.out.println("************************************************************");
+    }
+
     private void processContactMessage(Message message) {
         if (!message.hasContact()) return;
 
@@ -77,7 +104,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
         String messageText = "Thank you. Your phone number is " + contact.getPhoneNumber();
 
         try {
-            boolean authorised = authService.isAuthorised(contact.getPhoneNumber());
+            boolean authorised = authorisationService.isAuthorised(contact.getPhoneNumber());
             if (authorised) {
                 messageText += ". You're authorised to join our groups.";
             } else {

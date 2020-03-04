@@ -22,8 +22,7 @@
     Username of bot: ImpactHubConciergeBot
     Token: 146614880:AAG4RJfspoaDL1ACwDLRo8EjkMITn3Ckjfw
     -->
-    <bean id="gatewayBot" class="com.impacthub.bot.bots.Concierge">
-        <constructor-arg value="ImpactHubConciergeBot" type="String"/>
+    <bean id="conciergeBot" class="com.impacthub.bot.bots.Concierge">
         <constructor-arg value="1146614880:AAG4RJfspoaDL1ACwDLRo8EjkMITn3Ckjfw" type="String"/>
         <property name="authorisationService" ref="authorisationService"/>
     </bean>
@@ -45,7 +44,7 @@
     <bean id="bots" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-                <ref bean="gatewayBot"/>
+                <ref bean="conciergeBot"/>
                 <ref bean="testBot"/>
             </list>
         </constructor-arg>
