@@ -1,5 +1,7 @@
 package com.impacthub.bot.bots.commands;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -7,15 +9,9 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-/**
- * This command simply replies with a hello to the users command and
- * sends them the 'kind' words back, which they send via command parameters
- *
- * @author Timo Schulz (Mit0x2)
- */
 public class HelloCommand extends BotCommand {
 
-    private static final String LOGTAG = "HELLOCOMMAND";
+    private static final Logger LOGGER = LoggerFactory.getLogger(HelloCommand.class);
 
     public HelloCommand() {
         super("hello", "Say hallo to this bot");
@@ -43,8 +39,7 @@ public class HelloCommand extends BotCommand {
         try {
             absSender.execute(answer);
         } catch (TelegramApiException e) {
-            //todo refactor
-            System.out.println("e = " + e);
+            LOGGER.error("Error while executing Hello command.", e);
         }
     }
 }

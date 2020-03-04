@@ -1,5 +1,7 @@
 package com.impacthub.bot.bots.commands;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthenticateCommand extends BotCommand {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticateCommand.class);
 
     public AuthenticateCommand() {
         super("authenticate", "Do authenticate");
@@ -55,9 +59,7 @@ public class AuthenticateCommand extends BotCommand {
         try {
             absSender.execute(answer);
         } catch (TelegramApiException e) {
-            //todo refactor
-            System.out.println("e = " + e);
+            LOGGER.error("Error while executing Hello command.", e);
         }
-
     }
 }
