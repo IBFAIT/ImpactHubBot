@@ -8,8 +8,8 @@
     <artifactId>ImpactHub_bot</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <maven.compiler.source>1.13</maven.compiler.source>
-        <maven.compiler.target>1.13</maven.compiler.target>
+        <maven.compiler.source>1.11</maven.compiler.source>
+        <maven.compiler.target>1.11</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -78,6 +78,12 @@
             <version>5.2.3.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.telegram</groupId>
@@ -94,7 +100,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>13</release>
+                    <release>11</release>
                 </configuration>
             </plugin>
 
