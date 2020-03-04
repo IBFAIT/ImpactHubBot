@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import static com.impacthub.bot.services.googlesheets.Constants.*;
 import static java.lang.Boolean.parseBoolean;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,13 +36,13 @@ public class GoogleSheetServiceTest {
 
         try {
             googleSheetService = new GoogleSheetService(spreadSheetId);
-            String fieldValue = googleSheetService.getFieldValue(1, MEMBER_ID);
+            String fieldValue = googleSheetService.getFieldValue(1, Columns.MEMBER_ID.getColNum());
             assertEquals("34421", fieldValue);
 
-            fieldValue = googleSheetService.getFieldValue(3, IH_MEMBERSHIP);
+            fieldValue = googleSheetService.getFieldValue(3, Columns.IH_MEMBERSHIP.getColNum());
             assertEquals("Nomad", fieldValue);
 
-            fieldValue = googleSheetService.getFieldValue(3, BOT_ADMIN);
+            fieldValue = googleSheetService.getFieldValue(3, Columns.BOT_ADMIN.getColNum());
             assertFalse(parseBoolean(fieldValue));
 
         } catch (ServiceException | IOException | GeneralSecurityException e) {
@@ -59,7 +58,7 @@ public class GoogleSheetServiceTest {
 
         googleSheetService = new GoogleSheetService(spreadSheetId);
 
-        assertEquals(0, googleSheetService.getColNumByColName(MEMBER_ID));
-        assertEquals(5, googleSheetService.getColNumByColName(TELEGRAM_USER_NAME));
+        assertEquals(0, Columns.MEMBER_ID.getColNum());
+        assertEquals(5, Columns.TELEGRAM_USER_NAME.getColNum());
     }
 }

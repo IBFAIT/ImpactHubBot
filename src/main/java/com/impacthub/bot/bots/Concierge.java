@@ -1,9 +1,6 @@
 package com.impacthub.bot.bots;
 
-import com.impacthub.bot.bots.commands.AuthenticateCommand;
-import com.impacthub.bot.bots.commands.HelloCommand;
-import com.impacthub.bot.bots.commands.HelpCommand;
-import com.impacthub.bot.bots.commands.StartCommand;
+import com.impacthub.bot.bots.commands.*;
 import com.impacthub.bot.bots.commands.util.DefaultAction;
 import com.impacthub.bot.services.ServiceException;
 import com.impacthub.bot.services.authorisation.AuthorisationService;
@@ -18,9 +15,15 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Concierge extends TelegramLongPollingCommandBot {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Concierge.class);
+
+    private static Map<Integer, String> userIdToPhone = new HashMap<>();
+
     private String botUsername;
     private String botToken;
 
@@ -38,6 +41,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
         register(new StartCommand(this));
         register(helpCommand);
         register(new AuthenticateCommand());
+        register(new MembershipCommand());
 
         registerDefaultAction(new DefaultAction(helpCommand));
     }
@@ -69,6 +73,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
         if (!message.hasContact()) return;
 
         Contact contact = message.getContact();
+        userIdToPhone.put(contact.getUserID(), contact.getPhoneNumber());
         String messageText = "Thank you. Your phone number is " + contact.getPhoneNumber();
 
         try {
@@ -105,6 +110,10 @@ public class Concierge extends TelegramLongPollingCommandBot {
         } catch (TelegramApiException e) {
             LOGGER.error("Error while processing text message", e);
         }
+    }
+
+    public static String getPhoneNumber(Integer userID) {
+        return userIdToPhone.get(userID);
     }
 
 }

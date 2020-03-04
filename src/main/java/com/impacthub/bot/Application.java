@@ -15,6 +15,8 @@ public class Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
+    private static ApplicationContext context;
+
     public static void main(String[] args) {
 
         LOGGER.info("Starting bot ...");
@@ -23,8 +25,8 @@ public class Application {
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 
-            ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
-            List bots = (List) context.getBean("bots");
+            context = new ClassPathXmlApplicationContext("application-context.xml");
+            List bots = (List) getBean("bots");
 
             for (Object obj : bots) {
                 LongPollingBot bot = (LongPollingBot) obj;
@@ -41,4 +43,7 @@ public class Application {
         }
     }
 
+    public static Object getBean(String beanName) {
+        return context.getBean(beanName);
+    }
 }

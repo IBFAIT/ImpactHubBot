@@ -22,4 +22,8 @@ public class AuthorisationService implements Service {
         return googleSheetService.isAuthorised(phoneNumber);
     }
 
+    public String getMembership(String phoneNumber) {
+        return googleSheetService.getMembership(phoneNumber);
+    }
+
 }

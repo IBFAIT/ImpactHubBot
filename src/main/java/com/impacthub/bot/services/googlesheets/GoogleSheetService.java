@@ -10,8 +10,11 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.impacthub.bot.services.Constants;
 import com.impacthub.bot.services.Service;
 import com.impacthub.bot.services.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,15 +23,15 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 import static com.google.api.services.sheets.v4.SheetsScopes.SPREADSHEETS;
-import static com.impacthub.bot.services.googlesheets.Constants.PHONE;
 import static java.util.List.of;
 
 public class GoogleSheetService implements Service {
-    private final static String APPLICATION_NAME = "Google Sheets Example";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleSheetService.class);
+
     private static Sheets sheetsService;
 
     private final Credential credential;
-    // AVI: private final String spreadSheetId = "1lRMtnii4Ys7q_UzNLPkA86fVcXhYkznl6SGvuOpn4SM";
     private final String spreadSheetId;
 
     public GoogleSheetService(String spreadSheetId) throws ServiceException {
@@ -61,22 +64,6 @@ public class GoogleSheetService implements Service {
         }
 
     }
-    
-    public String getFieldValue(int rowNum, String columnName) throws IOException, GeneralSecurityException {
-        return getFieldValue(rowNum, getColNumByColName(columnName));
-    }
-
-    public int getColNumByColName(String columnName) throws IOException, GeneralSecurityException {
-        List<List<Object>> values = readContent();
-
-        List<Object> list = values.get(0);
-        for (int i = 0; i < list.size(); i++) {
-            Object o = list.get(i);
-            if (columnName.equals(o))
-                return i;
-        }
-        throw new IllegalStateException("No column " + columnName);
-    }
 
     public String getFieldValue(int rowNum, int columnNum) throws IOException, GeneralSecurityException {
         List<List<Object>> values = readContent();
@@ -92,7 +79,7 @@ public class GoogleSheetService implements Service {
 
             for (List row : values) {
 
-                int colNum = getColNumByColName(PHONE);
+                int colNum = Columns.PHONE.getColNum();
                 String field = (String)row.get(colNum);
 
                 String pattern = "[^0-9]";
@@ -110,10 +97,34 @@ public class GoogleSheetService implements Service {
         }
     }
 
+    public String getMembership(String phoneNumber) {
+
+        try{
+            List<List<Object>> values = readContent();
+            for (List row : values) {
+
+                int colNum = Columns.PHONE.getColNum();
+                String field = (String)row.get(colNum);
+
+                String pattern = "[^0-9]";
+                String stripped1 = phoneNumber.replaceAll(pattern, "");
+                String stripped2 = field.replaceAll(pattern, "");
+
+                if (stripped1.equals(stripped2)) {
+                    return row.get(Columns.IH_MEMBERSHIP.getColNum()).toString();
+                }
+            }
+        } catch (GeneralSecurityException | IOException e){
+            LOGGER.error("Error while getting Membership.", e);
+        }
+
+        return Constants.DEFAULT_MEMBERSHIP;
+    }
+
     public Sheets getSheetsService() throws IOException, GeneralSecurityException {
         return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(),
                 JacksonFactory.getDefaultInstance(), credential)
-                .setApplicationName(APPLICATION_NAME)
+                .setApplicationName(Constants.APPLICATION_NAME)
                 .build();
     }
 
@@ -129,4 +140,5 @@ public class GoogleSheetService implements Service {
 
         return response.getValues();
     }
+
 }
