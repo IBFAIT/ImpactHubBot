@@ -21,15 +21,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class Concierge extends TelegramLongPollingCommandBot {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Concierge.class);
-    private String botUsername;
     private String botToken;
 
-    private AuthorisationService authService;
+    private AuthorisationService authorisationService;
 
-    public Concierge(String botUsername, String botToken) {
+    public Concierge(String botToken) {
         super(ApiContext.getInstance(DefaultBotOptions.class));
 
-        this.botUsername = botUsername;
         this.botToken = botToken;
 
         HelpCommand helpCommand = new HelpCommand(this);
@@ -43,7 +41,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
     }
 
     public void setAuthorisationService(AuthorisationService authService) {
-        this.authService = authService;
+        this.authorisationService = authService;
     }
 
     public String getBotUsername() {
@@ -100,7 +98,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
         String messageText = "Thank you. Your phone number is " + contact.getPhoneNumber();
 
         try {
-            boolean authorised = authService.isAuthorised(contact.getPhoneNumber());
+            boolean authorised = authorisationService.isAuthorised(contact.getPhoneNumber());
             if (authorised) {
                 messageText += ". You're authorised to join our groups.";
             } else {
@@ -129,9 +127,9 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
         try {
             execute(echoMessage);
+            LOGGER.info("Sent message : '{}' to Chat ID : {}", echoMessage.getText(), message.getChatId());
         } catch (TelegramApiException e) {
-            //todo refactor
-            BotLogger.error("foo", e);
+            LOGGER.error("Error while processing text message", e);
         }
     }
 
