@@ -28,6 +28,9 @@ import static com.impacthub.bot.services.Constants.DEFAULT_MEMBERSHIP;
 import static com.impacthub.bot.services.googlesheets.Columns.*;
 import static java.util.List.of;
 
+/**
+ * Services for DB interaction
+ */
 public class GoogleSheetService implements Service {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleSheetService.class);
@@ -37,6 +40,11 @@ public class GoogleSheetService implements Service {
     private final Credential credential;
     private final String spreadSheetId;
 
+    /**
+     * Create Service to Connect to Google SpreadSheet. Create GoogleAuthorization flow using GoogleClientSecrets object
+     *
+     * @param spreadSheetId
+     */
     public GoogleSheetService(String spreadSheetId) throws ServiceException {
         super();
         this.spreadSheetId = spreadSheetId;
@@ -57,7 +65,6 @@ public class GoogleSheetService implements Service {
                     .setAccessType("offline")
                     .build();
 
-
             credential = new AuthorizationCodeInstalledApp(
                     flow, new LocalServerReceiver())
                     .authorize("user");
@@ -68,6 +75,14 @@ public class GoogleSheetService implements Service {
 
     }
 
+
+    /**
+     * Get Field Value
+     *
+     * @param rowNum    Row number in the Google SpreadSheet
+     * @param columnNum Column number in the Google SpreadSheet
+     * @return String FieldValue
+     */
     public String getFieldValue(int rowNum, int columnNum) throws IOException, GeneralSecurityException {
         List<List<Object>> values = readContent();
         List<Object> row = values.get(rowNum);
@@ -75,6 +90,13 @@ public class GoogleSheetService implements Service {
         return (String) row.get(columnNum);
     }
 
+
+    /**
+     * Get User's authorization status based on the provided User's phone number
+     *
+     * @param phoneNumber phone number of the User
+     * @return Boolean Authorization status
+     */
     public boolean isAuthorised(String phoneNumber) throws ServiceException {
 
         try {
@@ -100,6 +122,13 @@ public class GoogleSheetService implements Service {
         }
     }
 
+
+    /**
+     * Get active membership of User
+     *
+     * @param userId User's Id
+     * @return String Active Membership
+     */
     //todo
     public String getMembership(int userId) {
 
@@ -122,6 +151,13 @@ public class GoogleSheetService implements Service {
         return DEFAULT_MEMBERSHIP;
     }
 
+
+    /**
+     * Get active membership of User
+     *
+     * @param phoneNumber User's phone number
+     * @return String Active Membership of the User
+     */
     public String getMembership(String phoneNumber) {
 
         try {
@@ -146,6 +182,12 @@ public class GoogleSheetService implements Service {
         return DEFAULT_MEMBERSHIP;
     }
 
+
+    /**
+     * Retuns an instance of GoogleSheet Service
+     *
+     * @return An instance of GoogleSheet Service
+     */
     public Sheets getSheetsService() throws IOException, GeneralSecurityException {
         return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(),
                 JacksonFactory.getDefaultInstance(), credential)
@@ -153,6 +195,12 @@ public class GoogleSheetService implements Service {
                 .build();
     }
 
+
+    /**
+     * Fetch List of Values from Google SpreadSheet
+     *
+     * @return {@code List<List<Object>>}
+     */
     public List<List<Object>> readContent() throws IOException, GeneralSecurityException {
         sheetsService = getSheetsService();
 
@@ -166,11 +214,25 @@ public class GoogleSheetService implements Service {
         return response.getValues();
     }
 
+
+    /**
+     * Get Field Value
+     *
+     * @param phoneNumber User's phone number
+     * @return Date Membership Expiration Date
+     */
     //todo
     public Date getMembershipExpirationDate(String phoneNumber) {
         return new Date();
     }
 
+
+    /**
+     * Get Field Value
+     *
+     * @param userId User's ID
+     * @return Date Membership Expiration Date
+     */
     //todo
     public Date getMembershipExpirationDate(int userId) {
         return new Date();

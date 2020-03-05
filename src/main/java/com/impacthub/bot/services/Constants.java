@@ -1,5 +1,8 @@
 package com.impacthub.bot.services;
 
+/**
+ * Pool of Application Constants
+ */
 public interface Constants {
     String APPLICATION_NAME = "Google Sheets Example";
     String DEFAULT_MEMBERSHIP = "None";

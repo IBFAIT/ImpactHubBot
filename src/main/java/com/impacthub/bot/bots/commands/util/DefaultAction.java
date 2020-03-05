@@ -10,15 +10,28 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.function.BiConsumer;
 
+/**
+ * Default action when user starts interacting with the bot.
+ */
 public class DefaultAction implements BiConsumer<AbsSender, Message> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAction.class);
     private final HelpCommand helpCommand;
 
+    /**
+     * Instantiate DefaultAction with HelpCommand.
+     */
     public DefaultAction(HelpCommand helpCommand) {
         this.helpCommand = helpCommand;
     }
 
+
+    /**
+     * Execute the default action.
+     *
+     * @param absSender absSender to send messages over.
+     * @param message   User's Message object.
+     */
     @Override
     public void accept(AbsSender absSender, Message message) {
         SendMessage commandUnknownMessage = new SendMessage();

@@ -11,10 +11,16 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot;
 
 import java.util.List;
 
+/**
+ * Main execution class of Application
+ */
 public class Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
+    /**
+     * Registers bots with Telegram API
+     */
     public static void main(String[] args) {
 
         LOGGER.info("Starting bot ...");
@@ -25,7 +31,7 @@ public class Application {
 
             ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
 
-            List bots = (List) context.getBean("bots");
+            List<LongPollingBot> bots = (List<LongPollingBot>) context.getBean("bots");
 
             for (Object obj : bots) {
                 LongPollingBot bot = (LongPollingBot) obj;

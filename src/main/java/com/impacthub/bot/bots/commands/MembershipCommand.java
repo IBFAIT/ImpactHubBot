@@ -14,16 +14,31 @@ import java.util.Date;
 
 import static com.impacthub.bot.services.Constants.*;
 
+/**
+ * Responsible for fetching membership details of the User.
+ */
 public class MembershipCommand extends BotCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MembershipCommand.class);
     private final AuthorisationService authService;
 
+    /**
+     * Instantiate {@link MembershipCommand} with {@link AuthorisationService}
+     * Add /membership to Command Registry
+     */
     public MembershipCommand(AuthorisationService authService) {
         super("membership", "Get Membership Status");
         this.authService = authService;
     }
 
+    /**
+     * Execute the command
+     *
+     * @param absSender absSender to send messages over.
+     * @param user      the user who sent the command.
+     * @param chat      the chat, to be able to send replies.
+     * @param strings   passed arguments.
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
@@ -58,7 +73,6 @@ public class MembershipCommand extends BotCommand {
 
         } catch (TelegramApiException e) {
             LOGGER.error("Error executing membership command", e);
-            e.printStackTrace();
         }
     }
 }

@@ -9,14 +9,31 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+/**
+ * This command simply replies with a hello to the users command and
+ * sends them the 'kind' words back, which they send via command parameters.
+ *
+ * @author
+ */
 public class HelloCommand extends BotCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HelloCommand.class);
 
+    /**
+     * Add /hello to command registry.
+     */
     public HelloCommand() {
         super("hello", "Say hallo to this bot");
     }
 
+    /**
+     * Execute the command
+     *
+     * @param absSender absSender to send messages over.
+     * @param user      the user who sent the command.
+     * @param chat      the chat, to be able to send replies.
+     * @param arguments passed arguments.
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
 

@@ -1,5 +1,8 @@
 package com.impacthub.bot.services.googlesheets;
 
+/**
+ * List of DB Columns
+ */
 public enum Columns {
     MEMBER_ID(0, "Member ID"),
     FIRST_NAME(1, "First Name"),
@@ -22,10 +25,22 @@ public enum Columns {
         this.colNum = colNum;
     }
 
+
+    /**
+     * Return Column Number from GoogleSpreadSheet
+     *
+     * @return int Column Number
+     */
     public int getColNum() {
         return colNum;
     }
 
+
+    /**
+     * Return Column Name from GoogleSpreadSheet
+     *
+     * @return String Column Name
+     */
     public String getColName() {
         return colName;
     }

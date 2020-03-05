@@ -11,16 +11,33 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+/**
+ * Starts the conversation with the bot.
+ * Welcomes User with a welcome message and informs what ImpactHub bot offers.
+ */
 public class StartCommand extends BotCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StartCommand.class);
     private final ICommandRegistry commandRegistry;
 
+
+    /**
+     * Instantiate {@link StartCommand}
+     * add /start to Command Registry
+     */
     public StartCommand(ICommandRegistry commandRegistry) {
         super("start", "With this command you can start the Bot");
         this.commandRegistry = commandRegistry;
     }
 
+    /**
+     * Execute the command
+     *
+     * @param absSender absSender to send messages over.
+     * @param user      the user who sent the command.
+     * @param chat      the chat, to be able to send replies.
+     * @param strings   passed arguments.
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 

@@ -12,6 +12,15 @@
         <maven.compiler.target>1.11</maven.compiler.target>
     </properties>
 
+    <!-- Project basic info-->
+    <name>Impact Hub Bot</name>
+    <description>
+        Impact Hub (IH) is a local and global network of 16’000+ members. Members are allowed
+        to work in 100+ locations across the world and do attend and organize events covering a
+        broad spectrum of contents.
+        The use of ​ Telegram​ should bring these members closer together.
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>org.telegram</groupId>
@@ -31,11 +40,13 @@
             <artifactId>google-api-client</artifactId>
             <version>1.30.8</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.oauth-client</groupId>
             <artifactId>google-oauth-client-jetty</artifactId>
             <version>1.30.5</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-sheets</artifactId>
@@ -96,6 +107,31 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.5</version>
+                <configuration>
+                    <port>9000</port>
+                    <tempWebappDirectory>${basedir}/target/site/tempdir</tempWebappDirectory>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>3.1.1</version>
+                            <reportSets>
+                                <reportSet>
+                                    <id>html</id>
+                                    <reports>
+                                        <report>javadoc</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
@@ -117,6 +153,29 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>--add-opens</argument>
+                        <argument>java.base/java.lang=ALL-UNNAMED</argument>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.impacthub.bot.Application</argument>
+                    </arguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>

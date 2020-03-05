@@ -17,6 +17,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+/**
+ * This bot manages User authentication and membership purchase options
+ */
+
 public class Concierge extends TelegramLongPollingCommandBot {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Concierge.class);
@@ -25,6 +29,12 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
     private AuthorisationService authorisationService;
 
+    /**
+     * Register Bot Commands.
+     *
+     * @param botToken    Bot Token.
+     * @param botCommands Array of BotCommand
+     */
     public Concierge(String botToken, BotCommand... botCommands) {
         super(ApiContext.getInstance(DefaultBotOptions.class));
 
@@ -41,18 +51,41 @@ public class Concierge extends TelegramLongPollingCommandBot {
         registerDefaultAction(new DefaultAction(helpCommand));
     }
 
+
+    /**
+     * Setter for {@link AuthorisationService} instance.
+     */
     public void setAuthorisationService(AuthorisationService authService) {
         this.authorisationService = authService;
     }
 
+
+    /**
+     * Returns Bot Username
+     *
+     * @return Bot username
+     */
     public String getBotUsername() {
         return "ImpactHubConciergeBot";
     }
 
+
+    /**
+     * Returns Bot Authentication Token
+     *
+     * @return Authentication token
+     */
     public String getBotToken() {
         return botToken;
     }
 
+
+    /**
+     * This method is called when receiving updates via GetUpdates method.
+     * If not reimplemented - it just sends updates by one into {@link #onUpdateReceived(Update)}.
+     *
+     * @param update Update received
+     */
     @Override
     public void processNonCommandUpdate(Update update) {
         Message message = update.getMessage();
@@ -63,6 +96,12 @@ public class Concierge extends TelegramLongPollingCommandBot {
         processContactMessage(message);
     }
 
+
+    /**
+     * Process message with contact attached
+     *
+     * @param message User's Message object
+     */
     private void processContactMessage(Message message) {
         if (!message.hasContact()) return;
 
@@ -91,6 +130,12 @@ public class Concierge extends TelegramLongPollingCommandBot {
         }
     }
 
+
+    /**
+     * Process Text Message
+     *
+     * @param message User's Message object
+     */
     private void processTextMessage(Message message) {
         if (!message.hasText()) return;
 
@@ -106,6 +151,13 @@ public class Concierge extends TelegramLongPollingCommandBot {
         }
     }
 
+
+    /**
+     * Returns User's phone number
+     *
+     * @param userID User's ID
+     * @return String User's phone number
+     */
     public String getPhoneNumberFromUserId(int userID) {
         return authorisationService.getPhoneNumberFromUserId(userID);
     }
