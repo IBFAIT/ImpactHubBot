@@ -14,32 +14,12 @@
 
     <!-- Project basic info-->
     <name>Impact Hub Bot</name>
-    <url>http://impacthub.xyz.</url>
     <description>
-        Welcome to ImpactHub. We are a community of creators creating a radically collaborative world!
-        You can connect with our ImpactHub Bot if you have any questions.
+        Impact Hub (IH) is a local and global network of 16’000+ members. Members are allowed
+        to work in 100+ locations across the world and do attend and organize events covering a
+        broad spectrum of contents.
+        The use of ​ Telegram​ should bring these members closer together.
     </description>
-
-    <!-- Issue Mgmt -->
-    <issueManagement>
-        <system>Trello</system>
-        <url>https://trello.com/</url>
-    </issueManagement>
-
-
-    <developers>
-        <developer>
-            <id>Tony</id>
-            <name>Cliffton</name>
-            <email>Tony.cliffton123@xyz.com</email>
-            <roles>
-                <role>Project Manager</role>
-                <role>Architect</role>
-            </roles>
-            <organization>ImpactHub.com</organization>
-            <timezone>-5</timezone>
-        </developer>
-    </developers>
 
     <dependencies>
         <dependency>
@@ -148,12 +128,6 @@
                         </plugin>
                     </reportPlugins>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.5</version>
             </plugin>
 
             <plugin>
