@@ -3,7 +3,6 @@ package com.impacthub.bot.bots.commands;
 import com.impacthub.bot.Application;
 import com.impacthub.bot.bots.Concierge;
 import com.impacthub.bot.services.Constants;
-import com.impacthub.bot.services.ServiceException;
 import com.impacthub.bot.services.authorisation.AuthorisationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +23,8 @@ public class MembershipCommand extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
+
+        //todo: userName is never used
         String userName = chat.getUserName();
         if (userName == null || userName.isEmpty()) {
             userName = user.getFirstName();
@@ -34,7 +35,7 @@ public class MembershipCommand extends BotCommand {
         message.setChatId(chat.getId());
 
         try {
-            if(phoneNumber != null) {
+            if (phoneNumber != null) {
                 AuthorisationService authService = (AuthorisationService) Application.getBean("authorisationService");
                 String membership = authService.getMembership(phoneNumber);
 

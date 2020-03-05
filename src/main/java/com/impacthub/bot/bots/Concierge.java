@@ -24,7 +24,6 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
     private static Map<Integer, String> userIdToPhone = new HashMap<>();
 
-    private String botUsername;
     private String botToken;
 
     private AuthorisationService authorisationService;
@@ -59,42 +58,15 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
     @Override
     public void processNonCommandUpdate(Update update) {
-        if (update.hasMessage()) {
-            Message message = update.getMessage();
+        Message message = update.getMessage();
 
-            //TODO: should be refactored to AuthenticationCommand or somewhere else
-            processTextMessage(message);
-            processContactMessage(message);
-        }
+        //TODO: should be refactored to AuthenticationCommand or somewhere else
+        processTextMessage(message);
+        processContactMessage(message);
+
     }
 
-    private void log(Update update) {
-        System.out.println("************************************************************");
-        System.out.println("update = " + update);
-        System.out.println("update.getUpdateId() = " + update.getUpdateId());
-        System.out.println("update.getChannelPost() = " + update.getChannelPost());
-        System.out.println("update.getCallbackQuery() = " + update.getCallbackQuery());
-        System.out.println("update.getMessage() = " + update.getMessage());
-        System.out.println("update.getChosenInlineQuery() = " + update.getChosenInlineQuery());
 
-        if (update.hasMessage()) {
-            Message message = update.getMessage();
-            System.out.println("message = " + message);
-            System.out.println("message.getFrom() = " + message.getFrom());
-            System.out.println("message.getChat() = " + message.getChat());
-            System.out.println("message.getText() = " + message.getText());
-            System.out.println("message.getAuthorSignature() = " + message.getAuthorSignature());
-            System.out.println("message.getCaption() = " + message.getCaption());
-            System.out.println("message.getConnectedWebsite() = " + message.getConnectedWebsite());
-            System.out.println("message.getChatId() = " + message.getChatId());
-            System.out.println("message.getDocument() = " + message.getDocument());
-            System.out.println("message.getNewChatMembers() = " + message.getNewChatMembers());
-            System.out.println("message.getLeftChatMember() = " + message.getLeftChatMember());
-            System.out.println("message.isUserMessage() = " + message.isUserMessage());
-        }
-
-        System.out.println("************************************************************");
-    }
 
     private void processContactMessage(Message message) {
         if (!message.hasContact()) return;
