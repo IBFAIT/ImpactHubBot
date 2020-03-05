@@ -13,19 +13,41 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bots requests for User's phone number and location.
+ */
+
 public class TestBot extends TelegramLongPollingBot {
 
     private String botToken;
     private String botUsername;
 
+    /**
+     * Sets Bot Authentication Token
+     *
+     * @param botToken Authentication Token
+     */
     public void setBotToken(String botToken) {
         this.botToken = botToken;
     }
 
+
+    /**
+     * Sets Bot UserName
+     *
+     * @param botUsername Bot Username
+     */
     public void setBotUsername(String botUsername) {
         this.botUsername = botUsername;
     }
 
+
+    /**
+     * This method is called when receiving updates via GetUpdates method.
+     * If not reimplemented - it just sends updates by one into {@link #onUpdateReceived(Update)}.
+     *
+     * @param update Update received
+     */
     public void onUpdateReceived(Update update) {
 
         if (update.getMessage().getContact() != null) {
@@ -61,13 +83,25 @@ public class TestBot extends TelegramLongPollingBot {
         }
     }
 
+    /**
+     * Returns Bot Username
+     *
+     * @return botUsername Bot username
+     */
     public String getBotUsername() {
         return botUsername;
     }
 
+
+    /**
+     * Retuns Bot Authentication Token
+     *
+     * @return botToken Authentication token
+     */
     public String getBotToken() {
         return botToken;
     }
+
 
     public void sendMessage(Update update) throws TelegramApiException {
         SendMessage message = new SendMessage();
@@ -76,6 +110,11 @@ public class TestBot extends TelegramLongPollingBot {
         execute(message);
     }
 
+    /**
+     * Welcome message for the User
+     *
+     * @param update Update received
+     */
     public void greet(Update update) throws TelegramApiException {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -90,6 +129,12 @@ public class TestBot extends TelegramLongPollingBot {
         }
     }
 
+
+    /**
+     * Set markup for Message
+     *
+     * @param sendMessage SendMessage instance
+     */
     public synchronized void setButtons(SendMessage sendMessage) {
 
         // Create a keyboard
@@ -119,6 +164,12 @@ public class TestBot extends TelegramLongPollingBot {
         replyKeyboardMarkup.setKeyboard(keyboard);
     }
 
+
+    /**
+     * Request user for contact
+     *
+     * @param update Update received
+     */
     public void getContact(Update update) {
 
         if (update.getMessage().getText().equals("Yes")) {
@@ -154,6 +205,11 @@ public class TestBot extends TelegramLongPollingBot {
     }
 
 
+    /**
+     * Request user for location
+     *
+     * @param update Update received
+     */
     public void getLocation(Update update) throws TelegramApiException {
 
         execute(new SendMessage()

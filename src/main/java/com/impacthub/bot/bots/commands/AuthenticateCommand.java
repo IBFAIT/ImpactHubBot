@@ -17,16 +17,33 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Responsible for Authentication of the User.
+ */
 public class AuthenticateCommand extends BotCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticateCommand.class);
     private final AuthorisationService authService;
 
+    /**
+     * Instantiate {@link AuthenticateCommand} command with {@link AuthorisationService}.
+     * Add /authenticate to command registry.
+     * */
     public AuthenticateCommand(AuthorisationService authService) {
         super("authenticate", "Do authenticate");
         this.authService = authService;
     }
 
+
+    /**
+     * Authenticates User by phone number.
+     * Execute the command.
+     *
+     * @param absSender absSender to send messages over.
+     * @param user      the user who sent the command.
+     * @param chat      the chat, to be able to send replies.
+     * @param arguments passed arguments.
+     */
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
         String userName = chat.getUserName();
