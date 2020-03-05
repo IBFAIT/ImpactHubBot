@@ -20,9 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.List;
 
 import static com.google.api.services.sheets.v4.SheetsScopes.SPREADSHEETS;
+import static com.impacthub.bot.services.Constants.DEFAULT_MEMBERSHIP;
+import static com.impacthub.bot.services.googlesheets.Columns.*;
 import static java.util.List.of;
 
 public class GoogleSheetService implements Service {
@@ -79,8 +82,8 @@ public class GoogleSheetService implements Service {
 
             for (List row : values) {
 
-                int colNum = Columns.PHONE.getColNum();
-                String field = (String)row.get(colNum);
+                int colNum = PHONE.getColNum();
+                String field = (String) row.get(colNum);
 
                 String pattern = "[^0-9]";
                 String stripped1 = phoneNumber.replaceAll(pattern, "");
@@ -97,28 +100,50 @@ public class GoogleSheetService implements Service {
         }
     }
 
-    public String getMembership(String phoneNumber) {
+    //todo
+    public String getMembership(int userId) {
 
-        try{
+        try {
             List<List<Object>> values = readContent();
             for (List row : values) {
 
-                int colNum = Columns.PHONE.getColNum();
-                String field = (String)row.get(colNum);
+                int colNum = USER_ID.getColNum();
+
+                String field = (String) row.get(colNum);
+
+                if (Integer.toString(userId).equals(field)) {
+                    return row.get(IH_MEMBERSHIP.getColNum()).toString();
+                }
+            }
+        } catch (GeneralSecurityException | IOException e) {
+            LOGGER.error("Error while getting Membership.", e);
+        }
+
+        return DEFAULT_MEMBERSHIP;
+    }
+
+    public String getMembership(String phoneNumber) {
+
+        try {
+            List<List<Object>> values = readContent();
+            for (List row : values) {
+
+                int colNum = PHONE.getColNum();
+                String field = (String) row.get(colNum);
 
                 String pattern = "[^0-9]";
                 String stripped1 = phoneNumber.replaceAll(pattern, "");
                 String stripped2 = field.replaceAll(pattern, "");
 
                 if (stripped1.equals(stripped2)) {
-                    return row.get(Columns.IH_MEMBERSHIP.getColNum()).toString();
+                    return row.get(IH_MEMBERSHIP.getColNum()).toString();
                 }
             }
-        } catch (GeneralSecurityException | IOException e){
+        } catch (GeneralSecurityException | IOException e) {
             LOGGER.error("Error while getting Membership.", e);
         }
 
-        return Constants.DEFAULT_MEMBERSHIP;
+        return DEFAULT_MEMBERSHIP;
     }
 
     public Sheets getSheetsService() throws IOException, GeneralSecurityException {
@@ -141,4 +166,13 @@ public class GoogleSheetService implements Service {
         return response.getValues();
     }
 
+    //todo
+    public Date getMembershipExpirationDate(String phoneNumber) {
+        return new Date();
+    }
+
+    //todo
+    public Date getMembershipExpirationDate(int userId) {
+        return new Date();
+    }
 }

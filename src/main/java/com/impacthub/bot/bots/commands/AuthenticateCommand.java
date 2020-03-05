@@ -1,5 +1,7 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.authorisation.AuthorisationService;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -18,22 +20,53 @@ import java.util.List;
 public class AuthenticateCommand extends BotCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticateCommand.class);
+    private final AuthorisationService authService;
 
-    public AuthenticateCommand() {
+    public AuthenticateCommand(AuthorisationService authService) {
         super("authenticate", "Do authenticate");
+        this.authService = authService;
     }
 
     @Override
-    //todo: Click to share your contact number doesn't appear on iphone 8!
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
         String userName = chat.getUserName();
         if (userName == null || userName.isEmpty()) {
             userName = user.getFirstName() + " " + user.getLastName();
         }
 
-        StringBuilder messageTextBuilder = new StringBuilder("Hello ").append(userName);
-        messageTextBuilder.append("\nIn order to join our channels you have to authenticate with your phone number. ");
+        String phoneNumber = authService.getPhoneNumberFromUserId(user.getId());
 
+        SendMessage answer = new SendMessage();
+        StringBuilder messageTextBuilder = new StringBuilder("Hello ").append(userName);
+
+        //todo replace /w optional...
+        if (phoneNumber != null) {
+            messageTextBuilder.append("\nYou already authenticated w/ your phone number. Many thanks.");
+
+        } else {
+            if (!chat.isUserChat()) {
+                messageTextBuilder.append("\nI'm sorry, you can't authenticate within a group or supergroup - That's for your own security. Please get in touch w/ me directly to authenticate properly: https://t.me/@ImpactHubConciergeBot");
+            } else {
+                messageTextBuilder.append("\nIn order to join our channels you have to authenticate with your phone number. ");
+
+                ReplyKeyboardMarkup replyKeyboardMarkup = getReplyKeyboardMarkup();
+
+                answer.setReplyMarkup(replyKeyboardMarkup);
+            }
+        }
+
+        answer.setChatId(chat.getId().toString());
+        answer.setText(messageTextBuilder.toString());
+
+        try {
+            absSender.execute(answer);
+        } catch (TelegramApiException e) {
+            LOGGER.error("Error while executing Hello command.", e);
+        }
+    }
+
+    @NotNull
+    private ReplyKeyboardMarkup getReplyKeyboardMarkup() {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 
         replyKeyboardMarkup.setSelective(true);
@@ -50,16 +83,6 @@ public class AuthenticateCommand extends BotCommand {
         keyboard.add(keyboardFirstRow);
 
         replyKeyboardMarkup.setKeyboard(keyboard);
-
-        SendMessage answer = new SendMessage();
-        answer.setReplyMarkup(replyKeyboardMarkup);
-        answer.setChatId(chat.getId().toString());
-        answer.setText(messageTextBuilder.toString());
-
-        try {
-            absSender.execute(answer);
-        } catch (TelegramApiException e) {
-            LOGGER.error("Error while executing Hello command.", e);
-        }
+        return replyKeyboardMarkup;
     }
 }

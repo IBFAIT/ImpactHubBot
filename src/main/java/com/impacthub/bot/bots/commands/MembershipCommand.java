@@ -33,7 +33,6 @@ public class MembershipCommand extends BotCommand {
             userName = user.getFirstName();
         }
 
-
         String phoneNumber = authService.getPhoneNumberFromUserId(user.getId());
         SendMessage message = new SendMessage();
         message.setChatId(chat.getId());

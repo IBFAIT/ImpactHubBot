@@ -15,6 +15,24 @@
         <constructor-arg>
             <ref bean="googleSheetService"/>
         </constructor-arg>
+        <constructor-arg>
+            <ref bean="db"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="db" class="com.impacthub.bot.services.db.Database"/>
+
+    <bean id="helloCommand" class="com.impacthub.bot.bots.commands.HelloCommand"/>
+    <bean id="startCommand" class="com.impacthub.bot.bots.commands.StartCommand"/>
+    <bean id="authenticateCommand" class="com.impacthub.bot.bots.commands.AuthenticateCommand">
+        <constructor-arg>
+            <ref bean="authorisationService"/>
+        </constructor-arg>
+    </bean>
+    <bean id="membershipCommand" class="com.impacthub.bot.bots.commands.MembershipCommand">
+        <constructor-arg>
+            <ref bean="authorisationService"/>
+        </constructor-arg>
     </bean>
 
     <!--
@@ -24,10 +42,16 @@
     -->
     <bean id="conciergeBot" class="com.impacthub.bot.bots.Concierge">
         <constructor-arg value="1146614880:AAG4RJfspoaDL1ACwDLRo8EjkMITn3Ckjfw" type="String"/>
+        <constructor-arg>
+            <list>
+                <ref bean="helloCommand"/>
+                <ref bean="authenticateCommand"/>
+                <ref bean="membershipCommand"/>
+            </list>
+        </constructor-arg>
+
         <property name="authorisationService" ref="authorisationService"/>
     </bean>
-
-
 
 
     <!--

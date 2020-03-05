@@ -3,6 +3,8 @@ package com.impacthub.bot.services.googlesheets;
 import com.impacthub.bot.services.ServiceException;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -10,14 +12,14 @@ import java.security.GeneralSecurityException;
 import static java.lang.Boolean.parseBoolean;
 
 public class GoogleSheetServiceTest {
-    private String spreadSheetId = "16tB4m6WEiJLN3MGstkAWGCD4D_MdxPR8jJOmJRkPZtA";
 
     @Test
     public void isAuthorisedByPhoneNumber() {
-        GoogleSheetService googleSheetService;
-        try {
-            googleSheetService = new GoogleSheetService(spreadSheetId);
 
+        ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+        GoogleSheetService googleSheetService = (GoogleSheetService) context.getBean("googleSheetService");
+
+        try {
             final String authorizedPhoneNumber = "+41 79 324 23 84";
             Assert.assertTrue(googleSheetService.isAuthorised(authorizedPhoneNumber));
 
@@ -32,10 +34,10 @@ public class GoogleSheetServiceTest {
     @Test
     public void getFieldValue() {
 
-        GoogleSheetService googleSheetService;
+        ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+        GoogleSheetService googleSheetService = (GoogleSheetService) context.getBean("googleSheetService");
 
         try {
-            googleSheetService = new GoogleSheetService(spreadSheetId);
             String fieldValue = googleSheetService.getFieldValue(1, Columns.MEMBER_ID.getColNum());
             Assert.assertEquals("34421", fieldValue);
 
@@ -45,20 +47,22 @@ public class GoogleSheetServiceTest {
             fieldValue = googleSheetService.getFieldValue(3, Columns.BOT_ADMIN.getColNum());
             Assert.assertFalse(parseBoolean(fieldValue));
 
-        } catch (ServiceException | IOException | GeneralSecurityException e) {
+        } catch (IOException | GeneralSecurityException e) {
             Assert.fail(e.getMessage());
         }
 
     }
 
     @Test
-    public void getColNumByColName() throws ServiceException, IOException, GeneralSecurityException {
-
-        GoogleSheetService googleSheetService;
-
-        googleSheetService = new GoogleSheetService(spreadSheetId);
+    public void getColNumByColName() {
 
         Assert.assertEquals(0, Columns.MEMBER_ID.getColNum());
         Assert.assertEquals(5, Columns.TELEGRAM_USER_NAME.getColNum());
     }
+
+    //todo
+    @Test
+    public void getMembershipByUserId() {
+    }
+
 }
