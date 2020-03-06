@@ -44,7 +44,6 @@ public class TestBot extends TelegramLongPollingBot {
 
     /**
      * This method is called when receiving updates via GetUpdates method.
-     * If not reimplemented - it just sends updates by one into {@link #onUpdateReceived(Update)}.
      *
      * @param update Update received
      */

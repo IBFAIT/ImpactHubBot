@@ -3,8 +3,6 @@ package com.impacthub.bot.services.util;
 /**
  * @author Ruben Bermudez
  * @version 1.0
- * @brief Enumerate of emojis with unicode chars
- * @date 02 of July of 2015
  */
 public enum Emoji {
     // Emoticones group

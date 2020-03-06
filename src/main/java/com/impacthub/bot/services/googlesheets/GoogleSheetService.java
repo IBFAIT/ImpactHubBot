@@ -43,7 +43,8 @@ public class GoogleSheetService implements Service {
     /**
      * Create Service to Connect to Google SpreadSheet. Create GoogleAuthorization flow using GoogleClientSecrets object
      *
-     * @param spreadSheetId
+     * @param spreadSheetId Spreadheet's ID
+     * @throws ServiceException when an error occurs.
      */
     public GoogleSheetService(String spreadSheetId) throws ServiceException {
         super();

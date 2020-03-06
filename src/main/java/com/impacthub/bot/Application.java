@@ -20,6 +20,8 @@ public class Application {
 
     /**
      * Registers bots with Telegram API
+     *
+     * @param args Command line arguments
      */
     public static void main(String[] args) {
 

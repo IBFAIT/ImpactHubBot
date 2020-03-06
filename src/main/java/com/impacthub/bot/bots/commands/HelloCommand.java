@@ -13,7 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
  * This command simply replies with a hello to the users command and
  * sends them the 'kind' words back, which they send via command parameters.
  *
- * @author
  */
 public class HelloCommand extends BotCommand {
 
