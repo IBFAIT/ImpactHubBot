@@ -24,6 +24,11 @@
 
     <bean id="helloCommand" class="com.impacthub.bot.bots.commands.HelloCommand"/>
     <bean id="startCommand" class="com.impacthub.bot.bots.commands.StartCommand"/>
+    <bean id="joinCommand" class="com.impacthub.bot.bots.commands.JoinCommand">
+        <constructor-arg>
+            <ref bean="authorisationService"/>
+        </constructor-arg>
+    </bean>
     <bean id="authenticateCommand" class="com.impacthub.bot.bots.commands.AuthenticateCommand">
         <constructor-arg>
             <ref bean="authorisationService"/>
@@ -38,7 +43,7 @@
     <!--
     Name of bot: @ImpactHubConcierge
     Username of bot: ImpactHubConciergeBot
-    Token: 146614880:AAG4RJfspoaDL1ACwDLRo8EjkMITn3Ckjfw
+    Token: 1146614880:AAG4RJfspoaDL1ACwDLRo8EjkMITn3Ckjfw
     -->
     <bean id="conciergeBot" class="com.impacthub.bot.bots.Concierge">
         <constructor-arg value="1146614880:AAG4RJfspoaDL1ACwDLRo8EjkMITn3Ckjfw" type="String"/>
@@ -47,6 +52,7 @@
                 <ref bean="helloCommand"/>
                 <ref bean="authenticateCommand"/>
                 <ref bean="membershipCommand"/>
+                <ref bean="joinCommand"/>
             </list>
         </constructor-arg>
 
