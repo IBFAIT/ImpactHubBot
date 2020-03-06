@@ -91,6 +91,8 @@ public class GoogleSheetService implements Service {
     }
 
 
+//todo: Authorization is based on ih membership ... if a user has no membership or membership== none -> not authorized || authorized
+
     /**
      * Get User's authorization status based on the provided User's phone number
      *

@@ -3,6 +3,7 @@ package com.impacthub.bot.bots;
 import com.impacthub.bot.bots.commands.HelpCommand;
 import com.impacthub.bot.bots.commands.StartCommand;
 import com.impacthub.bot.bots.commands.util.DefaultAction;
+import com.impacthub.bot.services.Constants;
 import com.impacthub.bot.services.ServiceException;
 import com.impacthub.bot.services.authorisation.AuthorisationService;
 import org.slf4j.Logger;
@@ -99,15 +100,16 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
             try {
                 if (contact == null) {
-                    kickChatMember(message.getChatId(),
-                            message.getFrom().getId().toString());
-                    LOGGER.info("Unauthorized User {} banned from joining", update.getMessage().getFrom().getFirstName());
+                    kickChatMember(message.getChatId(), message.getFrom().getId().toString());
                 } else {
                     boolean authorised = authorisationService.isAuthorised(contact);
                     if (!authorised) {
-                        kickChatMember(message.getChatId(),
-                                message.getFrom().getId().toString());
-                        LOGGER.info("Unauthorized User {} banned from joining", update.getMessage().getFrom().getFirstName());
+                        kickChatMember(message.getChatId(), message.getFrom().getId().toString());
+                    } else {
+                        String membership = authorisationService.getMembership(contact);
+                        if (membership.equals(Constants.DEFAULT_MEMBERSHIP)) {
+                            kickChatMember(message.getChatId(), message.getFrom().getId().toString());
+                        }
                     }
                 }
             } catch (ServiceException e) {
@@ -165,28 +167,12 @@ public class Concierge extends TelegramLongPollingCommandBot {
         if (!message.hasText()) return;
 
         SendMessage echoMessage = new SendMessage();
-        Long chatId = message.getChatId();
-        Integer userId = message.getFrom().getId();
-
-        echoMessage.setChatId(chatId);
-
-        String msgText = "Hey\n Here's your message: '" + message.getText() + "'";
-
-        msgText += "\n";
-        msgText += "This chat's ID is " + chatId;
-        msgText += "\n";
-        msgText += "Your ID is " + userId;
-
-        String title = message.getChat().getTitle();
-        msgText += "\n";
-        msgText += "The title of this chat is '" + title + "'";
-
-
-        echoMessage.setText(msgText);
+        echoMessage.setChatId(message.getChatId());
+        echoMessage.setText("Hey here's your message:\n" + message.getText());
 
         try {
             execute(echoMessage);
-            LOGGER.info("Sent message : '{}' to Chat ID : {}", echoMessage.getText(), chatId);
+            LOGGER.info("Sent message : '{}' to Chat ID : {}", echoMessage.getText(), message.getChatId());
         } catch (TelegramApiException e) {
             LOGGER.error("Error while processing text message", e);
         }
@@ -219,8 +205,11 @@ public class Concierge extends TelegramLongPollingCommandBot {
         try {
             execute(kickChatMember);
         } catch (TelegramApiException e) {
+            //todo!!!
             e.printStackTrace();
         }
+
+        LOGGER.info("Unauthorized User {} banned from joining", userId);
     }
 
 }

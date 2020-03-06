@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -58,30 +59,23 @@ public class IHInlineTestBot extends TelegramLongPollingBot {
 
             System.out.println("query = " + query);
 
-            if (!query.isEmpty()) {
-                AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
-                answerInlineQuery.setInlineQueryId(inlineQuery.getId());
-                List<InlineQueryResult> results = new ArrayList<>();
+            AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
+            answerInlineQuery.setInlineQueryId(inlineQuery.getId());
+            List<InlineQueryResult> results = new ArrayList<>();
 
-                InputTextMessageContent messageContent = new InputTextMessageContent();
-                messageContent.disableWebPagePreview();
-                messageContent.enableMarkdown(true);
-                messageContent.setMessageText("foo bar");
-                InlineQueryResultArticle article = new InlineQueryResultArticle();
-                article.setInputMessageContent(messageContent);
-                article.setId(Integer.toString(1));
-                article.setTitle("foo title");
-                article.setDescription("foo descr");
+            for (int i = 0; i < 10; i++) {
+                InlineQueryResultArticle article = buildInlineQueryResultArticle(i);
                 results.add(article);
-
-                answerInlineQuery.setResults(results);
-
-                try {
-                    execute(answerInlineQuery);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
             }
+
+            answerInlineQuery.setResults(results);
+
+            try {
+                execute(answerInlineQuery);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+
 
             //answerInlineQuery
             //Use this method to send answers to an inline query. On success, True is returned.
@@ -110,7 +104,20 @@ public class IHInlineTestBot extends TelegramLongPollingBot {
         System.out.println("firstName = " + firstName);
         System.out.println("userName = " + userName);
 
+    }
 
+    @NotNull
+    private InlineQueryResultArticle buildInlineQueryResultArticle(int idx) {
+        InputTextMessageContent messageContent = new InputTextMessageContent();
+        messageContent.disableWebPagePreview();
+        messageContent.enableMarkdown(true);
+        messageContent.setMessageText("foo bar " + idx);
+        InlineQueryResultArticle article = new InlineQueryResultArticle();
+        article.setInputMessageContent(messageContent);
+        article.setId(Integer.toString(idx));
+        article.setTitle("foo title" + idx);
+        article.setDescription("foo descr" + idx);
+        return article;
     }
 
     @Override
