@@ -11,11 +11,14 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.ApiContext;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.time.Duration;
 
 /**
  * This bot manages User authentication and membership purchase options
@@ -90,6 +93,28 @@ public class Concierge extends TelegramLongPollingCommandBot {
     public void processNonCommandUpdate(Update update) {
         Message message = update.getMessage();
 
+        if (!(message.getNewChatMembers().isEmpty())) {
+
+            String contact = getPhoneNumberFromUserId(message.getFrom().getId());
+
+            try {
+                if (contact == null) {
+                    kickChatMember(message.getChatId(),
+                            message.getFrom().getId().toString());
+                    LOGGER.info("Unauthorized User {} banned from joining", update.getMessage().getFrom().getFirstName());
+                } else {
+                    boolean authorised = authorisationService.isAuthorised(contact);
+                    if (!authorised) {
+                        kickChatMember(message.getChatId(),
+                                message.getFrom().getId().toString());
+                        LOGGER.info("Unauthorized User {} banned from joining", update.getMessage().getFrom().getFirstName());
+                    }
+                }
+            } catch (ServiceException e) {
+                LOGGER.error("Error occurred while validating newly joined user {}", update.getMessage().getFrom().getFirstName(), e);
+            }
+
+        }
         processTextMessage(message);
 
         //TODO: should be refactored to AuthenticationCommand or somewhere else
@@ -112,7 +137,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
         try {
             boolean authorised = authorisationService.isAuthorised(contact.getPhoneNumber());
             if (authorised) {
-                messageText += ". You're authorised to join our groups.";
+                messageText += ". You're authorised to join our groups. Please use /join to join our groups";
             } else {
                 messageText += ". I'm sorry, you're not authorised to join our groups. You should buy an Impact Hub membership first.";
             }
@@ -140,12 +165,28 @@ public class Concierge extends TelegramLongPollingCommandBot {
         if (!message.hasText()) return;
 
         SendMessage echoMessage = new SendMessage();
-        echoMessage.setChatId(message.getChatId());
-        echoMessage.setText("Hey here's your message:\n" + message.getText());
+        Long chatId = message.getChatId();
+        Integer userId = message.getFrom().getId();
+
+        echoMessage.setChatId(chatId);
+
+        String msgText = "Hey\n Here's your message: '" + message.getText() + "'";
+
+        msgText += "\n";
+        msgText += "This chat's ID is " + chatId;
+        msgText += "\n";
+        msgText += "Your ID is " + userId;
+
+        String title = message.getChat().getTitle();
+        msgText += "\n";
+        msgText += "The title of this chat is '" + title + "'";
+
+
+        echoMessage.setText(msgText);
 
         try {
             execute(echoMessage);
-            LOGGER.info("Sent message : '{}' to Chat ID : {}", echoMessage.getText(), message.getChatId());
+            LOGGER.info("Sent message : '{}' to Chat ID : {}", echoMessage.getText(), chatId);
         } catch (TelegramApiException e) {
             LOGGER.error("Error while processing text message", e);
         }
@@ -160,6 +201,26 @@ public class Concierge extends TelegramLongPollingCommandBot {
      */
     public String getPhoneNumberFromUserId(int userID) {
         return authorisationService.getPhoneNumberFromUserId(userID);
+    }
+
+
+    /**
+     * Bans unauthorised users who have joined the group
+     *
+     * @param chatId Id of the Chat
+     * @param userId Id of the User
+     */
+    public void kickChatMember(Long chatId, String userId) {
+        KickChatMember kickChatMember = new KickChatMember();
+        kickChatMember.setChatId(chatId);
+        kickChatMember.setUserId(Integer.valueOf(userId));
+        kickChatMember.forTimePeriod(Duration.ofMinutes(1));
+
+        try {
+            execute(kickChatMember);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
 }

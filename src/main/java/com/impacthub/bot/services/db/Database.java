@@ -28,5 +28,4 @@ public class Database {
     public String getPhoneNumberFromUserId(int userID) {
         return userIdPhoneMap.get(userID);
     }
-
 }

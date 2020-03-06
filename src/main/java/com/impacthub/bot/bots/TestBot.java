@@ -23,6 +23,26 @@ public class TestBot extends TelegramLongPollingBot {
     private String botUsername;
 
     /**
+     * Sets Bot Authentication Token
+     *
+     * @param botToken Authentication Token
+     */
+    public void setBotToken(String botToken) {
+        this.botToken = botToken;
+    }
+
+
+    /**
+     * Sets Bot UserName
+     *
+     * @param botUsername Bot Username
+     */
+    public void setBotUsername(String botUsername) {
+        this.botUsername = botUsername;
+    }
+
+
+    /**
      * This method is called when receiving updates via GetUpdates method.
      * If not reimplemented - it just sends updates by one into {@link #onUpdateReceived(Update)}.
      *
@@ -72,14 +92,6 @@ public class TestBot extends TelegramLongPollingBot {
         return botUsername;
     }
 
-    /**
-     * Sets Bot UserName
-     *
-     * @param botUsername Bot Username
-     */
-    public void setBotUsername(String botUsername) {
-        this.botUsername = botUsername;
-    }
 
     /**
      * Retuns Bot Authentication Token
@@ -88,15 +100,6 @@ public class TestBot extends TelegramLongPollingBot {
      */
     public String getBotToken() {
         return botToken;
-    }
-
-    /**
-     * Sets Bot Authentication Token
-     *
-     * @param botToken Authentication Token
-     */
-    public void setBotToken(String botToken) {
-        this.botToken = botToken;
     }
 
 
