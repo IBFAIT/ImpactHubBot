@@ -1,0 +1,62 @@
+#logo {
+
+	width: 212px;
+ 	height: 114px;
+ 	float: left;
+ 	margin-top: -3px;
+
+}
+
+#welcome-message {
+
+	text-align:center;
+	font-size: 45px;
+	font-weight: 900;
+	margin-top: 75px;
+ 	margin-bottom: 20px;
+ 	font-family: sans-serif;
+  	background-color:rgb(18, 174, 236);
+  	color:white;
+  	padding-top: 5px;
+    padding-bottom: 5px
+}
+
+#bot-image { 
+	
+	display: block;
+	margin-left: auto;
+ 	margin-right: auto;"
+}
+
+#btn1 {
+
+	font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 100%;
+    color: #FFF;
+    background: #5dc390;
+    border-radius: 22px;
+    overflow: hidden;
+    display: inline-block;
+    padding: 15px 27px 13px;
+    text-transform: uppercase;
+    position: absolute;
+    margin-left: 47%;
+    margin-top: 6%;
+}
+
+#join-msg {
+
+	text-align: center;
+	font-family: sans-serif;
+
+}
+
+#connect-msg {
+
+	text-align: center;
+	font-family: sans-serif;
+	margin-top: -19px;
+
+}
