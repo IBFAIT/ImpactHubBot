@@ -1,5 +1,7 @@
 package com.impacthub.bot.bots;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Contact;
@@ -18,6 +20,7 @@ import java.util.List;
  */
 
 public class TestBot extends TelegramLongPollingBot {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestBot.class);
 
     private String botToken;
     private String botUsername;
@@ -51,11 +54,7 @@ public class TestBot extends TelegramLongPollingBot {
 
         if (update.getMessage().getContact() != null) {
             Contact contact = update.getMessage().getContact();
-            try {
                 getLocation(update);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
         }
 
         if (update.getMessage().getLocation() != null) {
@@ -66,20 +65,16 @@ public class TestBot extends TelegramLongPollingBot {
                         .setChatId(update.getMessage().getChatId())
                         .setText("Thank you for sharing your details"));
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                LOGGER.error("Error occurred while fetching contact.");
             }
         }
 
-        try {
             if (update.getMessage().getText().equals("/start")) {
                 greet(update);
             }
             if (update.getMessage().getText().equals("Yes")) {
                 getContact(update);
             }
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -114,17 +109,21 @@ public class TestBot extends TelegramLongPollingBot {
      *
      * @param update Update received
      */
-    public void greet(Update update) throws TelegramApiException {
+    public void greet(Update update) {
 
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            SendMessage message = new SendMessage();
-            StringBuilder msgBuilder = new StringBuilder();
-            msgBuilder.append("Greetings ").append(update.getMessage().getFrom().getFirstName()).append(" !");
-            msgBuilder.append("\n Please connect with us by sharing your contact number.");
-            message.setText(String.valueOf(msgBuilder));
-            setButtons(message);
-            message.setChatId(update.getMessage().getChatId());
-            execute(message);
+        try {
+            if (update.hasMessage() && update.getMessage().hasText()) {
+                SendMessage message = new SendMessage();
+                StringBuilder msgBuilder = new StringBuilder();
+                msgBuilder.append("Greetings ").append(update.getMessage().getFrom().getFirstName()).append(" !");
+                msgBuilder.append("\n Please connect with us by sharing your contact number.");
+                message.setText(String.valueOf(msgBuilder));
+                setButtons(message);
+                message.setChatId(update.getMessage().getChatId());
+                execute(message);
+            }
+        } catch (TelegramApiException e) {
+            LOGGER.error("Error occurred while processing welcome message.", e);
         }
     }
 
@@ -198,7 +197,7 @@ public class TestBot extends TelegramLongPollingBot {
             try {
                 execute(sendMessage);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                LOGGER.error("Error occurred while sending response", e);
             }
         }
     }
@@ -209,18 +208,18 @@ public class TestBot extends TelegramLongPollingBot {
      *
      * @param update Update received
      */
-    public void getLocation(Update update) throws TelegramApiException {
+    public void getLocation(Update update) {
+        try {
+            execute(new SendMessage()
+                    .setChatId(update.getMessage().getChatId())
+                    .setText("Thank you, kindly share your location as well. "));
 
-        execute(new SendMessage()
-                .setChatId(update.getMessage().getChatId())
-                .setText("Thank you, kindly share your location as well. "));
+            long chat_id = update.getMessage().getChatId();
+            SendMessage sendMessage = new SendMessage()
+                    .setChatId(chat_id)
+                    .setText("Waiting for location....");
 
-        long chat_id = update.getMessage().getChatId();
-        SendMessage sendMessage = new SendMessage()
-                .setChatId(chat_id)
-                .setText("Waiting for location....");
-
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+            ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
@@ -236,10 +235,9 @@ public class TestBot extends TelegramLongPollingBot {
         keyboard.add(keyboardFirstRow);
         replyKeyboardMarkup.setKeyboard(keyboard);
 
-        try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LOGGER.error("Error occurred while fetching location", e);
         }
     }
 }

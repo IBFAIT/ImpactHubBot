@@ -1,8 +1,11 @@
 package com.impacthub.bot.bots;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,6 +23,9 @@ import java.util.List;
 // t.me/IHInlineTestBot
 
 public class IHInlineTestBot extends TelegramLongPollingBot {
+
+    private static final Logger log = LoggerFactory.getLogger(IHInlineTestBot.class);
+
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
@@ -29,35 +35,53 @@ public class IHInlineTestBot extends TelegramLongPollingBot {
         InlineQuery inlineQuery = update.getInlineQuery();
         Integer updateId = update.getUpdateId();
 
-        System.out.println("message = " + message);
-        System.out.println("callbackQuery = " + callbackQuery);
-        System.out.println("channelPost = " + channelPost);
-        System.out.println("chosenInlineQuery = " + chosenInlineQuery);
-        System.out.println("inlineQuery = " + inlineQuery);
-        System.out.println("updateId = " + updateId);
+        log(message, callbackQuery, channelPost, chosenInlineQuery, inlineQuery, updateId);
 
         User user = null;
         if (update.hasMessage()) {
-            System.out.println("update.hasMessage() = " + update.hasMessage());
+            log.debug("update.hasMessage() = " + update.hasMessage());
 
             user = message.getFrom();
 
             Integer messageId = message.getMessageId();
-            System.out.println("messageId = " + messageId);
+            log.debug("messageId = " + messageId);
 
             String text = message.getText();
 
-            System.out.println("text = " + text);
+            log.debug("text = " + text);
+
+            String msg = "*bold \\*text*\n" +
+                    "_italic \\*text_\n" +
+                    "__underline__\n" +
+                    "~strikethrough~\n" +
+                    "*bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*\n" +
+                    "[inline URL](http://www.example.com/)\n" +
+                    "[inline mention of a user](tg://user?id=123456789)\n" +
+                    "`inline fixed-width code`\n" +
+                    "```\n" +
+                    "pre-formatted fixed-width code block\n" +
+                    "```\n" +
+                    "```python\n" +
+                    "pre-formatted fixed-width code block written in the Python programming language\n" +
+                    "```";
+
+            SendMessage sendMessage = new SendMessage(update.getMessage().getChat().getId(), msg);
+            sendMessage.setParseMode("MarkdownV2");
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
 
         } else if (update.hasInlineQuery()) {
 
-            System.out.println("update.hasInlineQuery() = " + update.hasInlineQuery());
+            log.debug("update.hasInlineQuery() = " + update.hasInlineQuery());
 
             user = inlineQuery.getFrom();
 
             String query = inlineQuery.getQuery();
 
-            System.out.println("query = " + query);
+            log.debug("query = " + query);
 
             AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
             answerInlineQuery.setInlineQueryId(inlineQuery.getId());
@@ -73,7 +97,7 @@ public class IHInlineTestBot extends TelegramLongPollingBot {
             try {
                 execute(answerInlineQuery);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                log.error("Error occurred while processing request", e);
             }
 
 
@@ -83,27 +107,36 @@ public class IHInlineTestBot extends TelegramLongPollingBot {
             //https://core.telegram.org/bots/api#answerinlinequery
 
         } else if (update.hasEditedMessage()) {
-            System.out.println("update.hasEditedMessage() = " + update.hasEditedMessage());
+            log.debug("update.hasEditedMessage() = " + update.hasEditedMessage());
             Message editedMessage = update.getEditedMessage();
             user = editedMessage.getFrom();
 
             String text = editedMessage.getText();
 
-            System.out.println("text = " + text);
+            log.debug("text = " + text);
         } else if (update.hasCallbackQuery()) {
             user = callbackQuery.getFrom();
 
-            System.out.println("callbackQuery.getMessage().getText() = " + callbackQuery.getMessage().getText());
+            log.debug("callbackQuery.getMessage().getText() = " + callbackQuery.getMessage().getText());
         }
 
         Integer userId = user.getId();
         String firstName = user.getFirstName();
         String userName = user.getUserName();
 
-        System.out.println("userId = " + userId);
-        System.out.println("firstName = " + firstName);
-        System.out.println("userName = " + userName);
+        log.debug("userId = " + userId);
+        log.debug("firstName = " + firstName);
+        log.debug("userName = " + userName);
 
+    }
+
+    private void log(Message message, CallbackQuery callbackQuery, Message channelPost, ChosenInlineQuery chosenInlineQuery, InlineQuery inlineQuery, Integer updateId) {
+        log.debug("message = " + message);
+        log.debug("callbackQuery = " + callbackQuery);
+        log.debug("channelPost = " + channelPost);
+        log.debug("chosenInlineQuery = " + chosenInlineQuery);
+        log.debug("inlineQuery = " + inlineQuery);
+        log.debug("updateId = " + updateId);
     }
 
     @NotNull

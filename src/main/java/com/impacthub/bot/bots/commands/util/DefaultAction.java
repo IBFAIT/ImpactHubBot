@@ -40,7 +40,7 @@ public class DefaultAction implements BiConsumer<AbsSender, Message> {
         try {
             absSender.execute(commandUnknownMessage);
         } catch (TelegramApiException e) {
-            LOGGER.error("Error while executing default action.", e);
+            LOGGER.error("Error occurred while executing default action.", e);
         }
         helpCommand.execute(absSender, message.getFrom(), message.getChat(), new String[]{});
     }

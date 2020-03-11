@@ -143,17 +143,19 @@ public class Concierge extends TelegramLongPollingCommandBot {
             } else {
                 messageText += ". I'm sorry, you're not authorised to join our groups. You should buy an Impact Hub membership first.";
             }
+        } catch (ServiceException e) {
+            LOGGER.error("Error while authorising by contact number : {}. Notification sent to User", contact.getPhoneNumber(), e);
+            messageText = Constants.ERROR_MESSAGE;
+        }
 
             SendMessage contactMessage = new SendMessage(
                     message.getChatId(),
                     messageText);
-
+        try {
             execute(contactMessage);
             LOGGER.info("Sent message : '{}' to Phone : {}", messageText, contact.getPhoneNumber());
         } catch (TelegramApiException e) {
             LOGGER.error("Error while sending response after receiving contact number : {}", contact.getPhoneNumber(), e);
-        } catch (ServiceException e) {
-            LOGGER.error("Error while authorising by contact number : {}", contact.getPhoneNumber(), e);
         }
     }
 

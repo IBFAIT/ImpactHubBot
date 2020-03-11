@@ -8,4 +8,5 @@ public interface Constants {
     String DEFAULT_MEMBERSHIP = "None";
     String NO_MEMBERSHIP = "You have no membership.";
     String UNAUTHORIZED_USER = "You are not authorized to execute %s command. Please authenticate using /authenticate command.";
+    String ERROR_MESSAGE = "Oops, looks like we encountered a technical issue while processing your request.\nKindly wait while we resolve it.\nSorry for the inconvenience";
 }
