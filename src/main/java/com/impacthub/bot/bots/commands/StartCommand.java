@@ -45,20 +45,23 @@ public class StartCommand extends BotCommand {
 
         String userName = user.getFirstName() + " " + user.getLastName();
 
-        messageBuilder.append("\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\n\n");
-        messageBuilder.append("\uD83D\uDC4B Welcome ").append(userName).append("! \uD83D\uDC4B \n\n ");
-        messageBuilder.append("⭐️I'm your Concierge at Impact Hub Zurich.⭐️ \n\n");
-        messageBuilder.append("This is what I can offer you right now:\n\n");
+        messageBuilder.append(
+                "🤗".repeat(10))
+                .append("\n\n")
+                .append("👋 Welcome ").append(userName).append("! 👋\n\n ")
+                .append("⭐ I'm your <b>Concierge</b> at Impact Hub Zurich.⭐ \n\n")
+                .append("🤗".repeat(10))
+                .append("\n\n")
+                .append("This is what I can offer you right now:\n\n");
 
         for (IBotCommand botCommand : commandRegistry.getRegisteredCommands()) {
-            messageBuilder.append(botCommand.toString()).append("\n\n");
+            messageBuilder.append("→").append(botCommand.toString()).append("\n\n");
         }
-
-        messageBuilder.append("\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E");
 
         SendMessage answer = new SendMessage();
         answer.setChatId(chat.getId().toString());
         answer.setText(messageBuilder.toString());
+        answer.setParseMode("HTML");
         answer.enableHtml(true);
 
         try {
