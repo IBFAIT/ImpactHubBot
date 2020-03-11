@@ -1,6 +1,8 @@
 package com.impacthub.bot.bots;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -20,6 +22,8 @@ import java.util.List;
 // t.me/IHInlineTestBot
 
 public class IHInlineTestBot extends TelegramLongPollingBot {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IHInlineTestBot.class);
+
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
@@ -73,7 +77,7 @@ public class IHInlineTestBot extends TelegramLongPollingBot {
             try {
                 execute(answerInlineQuery);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                LOGGER.error("Error occurred while processing request");
             }
 
 
