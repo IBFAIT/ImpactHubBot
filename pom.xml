@@ -8,7 +8,6 @@
     <artifactId>ImpactHub_bot</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <java.version>11</java.version>
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -142,7 +141,6 @@
                     <includes>
                         <include>${project.build.directory}/${project.build.finalName}.jar</include>
                     </includes>
-                    <jdkVersion>${java.version}</jdkVersion>
                     <processTypes>
                         <web>java $JAVA_OPTS -jar ${project.build.directory}/${project.build.finalName}.jar</web>
                     </processTypes>
