@@ -141,7 +141,6 @@
                     <includes>
                         <include>${project.build.directory}/${project.build.finalName}.jar</include>
                     </includes>
-                    <jdkVersion>1.11</jdkVersion>
                     <processTypes>
                         <web>java $JAVA_OPTS -jar ${project.build.directory}/${project.build.finalName}.jar</web>
                     </processTypes>
