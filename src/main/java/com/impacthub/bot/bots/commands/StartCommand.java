@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -46,9 +47,9 @@ public class StartCommand extends BotCommand {
         String userName = user.getFirstName() + " " + user.getLastName();
 
         messageBuilder.append("\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\n\n");
-        messageBuilder.append("\uD83D\uDC4B Welcome ").append(userName).append("! \uD83D\uDC4B \n\n ");
-        messageBuilder.append("⭐️I'm your Concierge at Impact Hub Zurich.⭐️ \n\n");
-        messageBuilder.append("This is what I can offer you right now:\n\n");
+        messageBuilder.append("\uD83D\uDC4B ").append(Messages.WELCOME).append(userName).append("! \uD83D\uDC4B \n\n ");
+        messageBuilder.append(Messages.WELCOME_MSG1).append("\n\n");
+        messageBuilder.append(Messages.WELCOME_MSG2).append("\n\n");
 
         for (IBotCommand botCommand : commandRegistry.getRegisteredCommands()) {
             messageBuilder.append(botCommand.toString()).append("\n\n");

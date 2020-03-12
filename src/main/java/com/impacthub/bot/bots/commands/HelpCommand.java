@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -40,7 +41,7 @@ public class HelpCommand extends BotCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
         StringBuilder helpMessageBuilder = new StringBuilder("<b>Help</b>\n");
-        helpMessageBuilder.append("These are the registered commands for this Bot:\n\n");
+        helpMessageBuilder.append(Messages.HELP_MSG+"\n\n");
 
         for (IBotCommand botCommand : commandRegistry.getRegisteredCommands()) {
             helpMessageBuilder.append(botCommand.toString()).append("\n\n");

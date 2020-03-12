@@ -4,6 +4,7 @@ import com.impacthub.bot.bots.commands.HelpCommand;
 import com.impacthub.bot.bots.commands.StartCommand;
 import com.impacthub.bot.bots.commands.util.DefaultAction;
 import com.impacthub.bot.services.Constants;
+import com.impacthub.bot.services.Messages;
 import com.impacthub.bot.services.ServiceException;
 import com.impacthub.bot.services.authorisation.AuthorisationService;
 import org.slf4j.Logger;
@@ -134,14 +135,14 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
         Contact contact = message.getContact();
         authorisationService.registerUser(contact.getUserID(), contact.getPhoneNumber());
-        String messageText = "Thank you. Your phone number is " + contact.getPhoneNumber();
+        String messageText = Messages.CONTACT_RECEIVED_MSG + contact.getPhoneNumber();
 
         try {
             boolean authorised = authorisationService.isAuthorised(contact.getPhoneNumber());
             if (authorised) {
-                messageText += ". You're authorised to join our groups. Please use /join to join our groups";
+                messageText += Messages.AUTHORISED_MSG;
             } else {
-                messageText += ". I'm sorry, you're not authorised to join our groups. You should buy an Impact Hub membership first.";
+                messageText += Messages.UNAUTHORISED_MSG;
             }
         }catch (ServiceException e) {
             LOGGER.error("Error while authorising by contact number : {}. Notification sent to User", contact.getPhoneNumber(), e);
@@ -170,7 +171,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
         SendMessage echoMessage = new SendMessage();
         echoMessage.setChatId(message.getChatId());
-        echoMessage.setText("Hey here's your message:\n" + message.getText());
+        echoMessage.setText(Messages.ECHO_MSG +"\n"+ message.getText());
 
         try {
             execute(echoMessage);

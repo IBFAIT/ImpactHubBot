@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.Messages;
 import com.impacthub.bot.services.authorisation.AuthorisationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,12 +62,12 @@ public class MembershipCommand extends BotCommand {
                     //todo!
                     Date expirationDate = authService.getMembershipExpirationDate(phoneNumber);
                     int days = 243;
-                    message.setText("Your membership is '" + membership + "' and will expire in " + days + " days.");
+                    message.setText(Messages.MEMBERSHIP_MSG1 + membership + Messages.MEMBERSHIP_MSG2 + days + Messages.DAYS);
                 } else {
                     message.setText(NO_MEMBERSHIP);
                 }
             } else {
-                message.setText(String.format(UNAUTHORIZED_USER, this.getCommandIdentifier()));
+                message.setText(String.format(Messages.ILLEGAL_ACTION, this.getCommandIdentifier()));
             }
 
             absSender.execute(message);

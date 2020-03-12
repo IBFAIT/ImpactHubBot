@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -44,7 +45,7 @@ public class HelloCommand extends BotCommand {
         StringBuilder messageTextBuilder = new StringBuilder("Hello ").append(userName);
         if (arguments != null && arguments.length > 0) {
             messageTextBuilder.append("\n");
-            messageTextBuilder.append("Thank you so much for your kind words:\n");
+            messageTextBuilder.append(Messages.ARGS_RECEIVED_MSG);
             messageTextBuilder.append(String.join(" ", arguments));
         }
 

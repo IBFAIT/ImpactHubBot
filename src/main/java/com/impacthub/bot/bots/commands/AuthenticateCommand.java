@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.Messages;
 import com.impacthub.bot.services.authorisation.AuthorisationService;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -58,13 +59,13 @@ public class AuthenticateCommand extends BotCommand {
 
         //todo replace /w optional...
         if (phoneNumber != null) {
-            messageTextBuilder.append("\nYou already authenticated w/ your phone number. Many thanks.");
+            messageTextBuilder.append(Messages.AUTHENTICATED_MSG);
 
         } else {
             if (!chat.isUserChat()) {
-                messageTextBuilder.append("\nI'm sorry, you can't authenticate within a group or supergroup - That's for your own security. Please get in touch w/ me directly to authenticate properly: https://t.me/@ImpactHubConciergeBot");
+                messageTextBuilder.append(Messages.CANNOT_AUTHENTICATE_MSG);
             } else {
-                messageTextBuilder.append("\nIn order to join our channels you have to authenticate with your phone number. ");
+                messageTextBuilder.append(Messages.JOIN_OPTIONS_MSG);
 
                 ReplyKeyboardMarkup replyKeyboardMarkup = getReplyKeyboardMarkup();
 
@@ -94,7 +95,7 @@ public class AuthenticateCommand extends BotCommand {
 
         KeyboardRow keyboardFirstRow = new KeyboardRow();
         KeyboardButton keyboardButton = new KeyboardButton();
-        keyboardButton.setText("Click to share your contact number !").setRequestContact(true);
+        keyboardButton.setText(Messages.CONTACT_BUTTON_MSG).setRequestContact(true);
         keyboardFirstRow.add(keyboardButton);
 
         keyboard.add(keyboardFirstRow);

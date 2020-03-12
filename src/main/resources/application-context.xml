@@ -7,7 +7,7 @@
 
     <bean id="googleSheetService" class="com.impacthub.bot.services.googlesheets.GoogleSheetService">
         <constructor-arg type="String">
-            <value>16tB4m6WEiJLN3MGstkAWGCD4D_MdxPR8jJOmJRkPZtA</value>
+            <value>1lRMtnii4Ys7q_UzNLPkA86fVcXhYkznl6SGvuOpn4SM</value>
         </constructor-arg>
     </bean>
 
@@ -46,7 +46,7 @@
     Token: 1146614880:AAG4RJfspoaDL1ACwDLRo8EjkMITn3Ckjfw
     -->
     <bean id="conciergeBot" class="com.impacthub.bot.bots.Concierge">
-        <constructor-arg value="1146614880:AAG4RJfspoaDL1ACwDLRo8EjkMITn3Ckjfw" type="String"/>
+        <constructor-arg value="1145375112:AAEEkBw1p269B6_xqUJjJVu4XiA65T8PTcw" type="String"/>
         <constructor-arg>
             <list>
                 <ref bean="helloCommand"/>
@@ -67,8 +67,8 @@
     -->
 
     <bean id="testBot" class="com.impacthub.bot.bots.TestBot">
-        <property name="botUsername" value="ImpactHubContactBot"/>
-        <property name="botToken" value="1117067090:AAHuNN4HWqqIlMpaL-iMo2HSZBPxpGu1w6s"/>
+        <property name="botUsername" value="ih_test_bot"/>
+        <property name="botToken" value="1136616927:AAF42Re7xvASO_tjMIpNCvud7bgvuX1nXSQ"/>
     </bean>
 
     <bean id="IHInlineTestBot" class="com.impacthub.bot.bots.IHInlineTestBot">
