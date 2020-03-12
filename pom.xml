@@ -123,6 +123,7 @@
                 <version>3.0.1</version>
                 <configuration>
                     <appName>impact-hub</appName>
+                    <jdkVersion>11</jdkVersion>
                     <processTypes>
                         <web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.impacthub.bot.Application</web>
                     </processTypes>
