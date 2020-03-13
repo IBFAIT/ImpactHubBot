@@ -142,7 +142,7 @@
                     </includes>
                     <processTypes>
                         <!--<web>java $JAVA_OPTS -jar ${project.build.directory}/${project.build.finalName}.jar</web>-->
-                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.impacthub.bot.Application</web>
+                        <web>java -jar target/classes:target/dependency/* ${project.build.finalName}.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>
