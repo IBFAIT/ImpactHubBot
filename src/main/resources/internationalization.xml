@@ -12,12 +12,4 @@
         </property>
     </bean>
 
-    <bean class="com.impacthub.bot.services.Messages">
-        <property name="locales">
-            <list value-type="java.util.Locale">
-                <value>Locale.SIMPLIFIED_CHINESE</value>
-            </list>
-        </property>
-    </bean>
-
 </beans>

@@ -12,8 +12,9 @@ public interface Messages {
 
     MessageSource resources = new ClassPathXmlApplicationContext("internationalization.xml");
 
-    //Locale locale = Locale.ENGLISH;
-    Locale locale = Locale.SIMPLIFIED_CHINESE;
+
+    Locale locale = Locale.ENGLISH;
+    //Locale locale = Locale.SIMPLIFIED_CHINESE;
 
 
     String HELLO = resources.getMessage("hello", null, "Default", locale);
