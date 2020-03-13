@@ -142,7 +142,7 @@
                     </includes>
                     <processTypes>
                         <!--<web>java $JAVA_OPTS -jar ${project.build.directory}/${project.build.finalName}.jar</web>-->
-                        <web>java -jar target/${project.build.finalName}.jar</web>
+                        <web>java -jar target/impacthub-bot.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>
@@ -180,6 +180,8 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <finalName>impacthub-bot</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>
