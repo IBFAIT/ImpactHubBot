@@ -41,7 +41,7 @@ public class HelpCommand extends BotCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
         StringBuilder helpMessageBuilder = new StringBuilder("<b>Help</b>\n");
-        helpMessageBuilder.append(Messages.HELP_MSG+"\n\n");
+        helpMessageBuilder.append(Messages.HELP_MSG + "\n\n");
 
         for (IBotCommand botCommand : commandRegistry.getRegisteredCommands()) {
             helpMessageBuilder.append(botCommand.toString()).append("\n\n");

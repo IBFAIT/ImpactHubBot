@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 /**
  * Default action when user starts interacting with the bot.
  */
-public class DefaultAction implements BiConsumer<AbsSender, Message> {
+public class DefaultAction implements BiConsumer<AbsSender, Message>{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAction.class);
     private final HelpCommand helpCommand;

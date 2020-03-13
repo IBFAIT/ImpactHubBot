@@ -103,7 +103,7 @@ public class TestBot extends TelegramLongPollingBot {
      *
      * @param update Update received
      */
-    public void greet(Update update){
+    public void greet(Update update) {
 
         try {
             if (update.hasMessage() && update.getMessage().hasText()) {

@@ -144,18 +144,18 @@ public class Concierge extends TelegramLongPollingCommandBot {
             } else {
                 messageText += Messages.UNAUTHORISED_MSG;
             }
-        }catch (ServiceException e) {
+        } catch (ServiceException e) {
             LOGGER.error("Error while authorising by contact number : {}. Notification sent to User", contact.getPhoneNumber(), e);
             messageText = Constants.ERROR_MESSAGE;
         }
 
-            SendMessage contactMessage = new SendMessage(
-                    message.getChatId(),
-                    messageText);
+        SendMessage contactMessage = new SendMessage(
+                message.getChatId(),
+                messageText);
         try {
             execute(contactMessage);
             LOGGER.info("Sent message : '{}' to Phone : {}", messageText, contact.getPhoneNumber());
-        }catch (TelegramApiException e) {
+        } catch (TelegramApiException e) {
             LOGGER.error("Error while sending response after receiving contact number : {}", contact.getPhoneNumber(), e);
         }
     }
@@ -171,7 +171,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
         SendMessage echoMessage = new SendMessage();
         echoMessage.setChatId(message.getChatId());
-        echoMessage.setText(Messages.ECHO_MSG +"\n"+ message.getText());
+        echoMessage.setText(Messages.ECHO_MSG + "\n" + message.getText());
 
         try {
             execute(echoMessage);
