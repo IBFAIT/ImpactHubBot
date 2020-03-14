@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots;
 
+import com.impacthub.bot.services.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -54,7 +55,11 @@ public class TestBot extends TelegramLongPollingBot {
 
         if (update.getMessage().getContact() != null) {
             Contact contact = update.getMessage().getContact();
+            try {
                 getLocation(update);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
 
         if (update.getMessage().getLocation() != null) {
@@ -63,18 +68,18 @@ public class TestBot extends TelegramLongPollingBot {
             try {
                 execute(new SendMessage()
                         .setChatId(update.getMessage().getChatId())
-                        .setText("Thank you for sharing your details"));
+                        .setText(Messages.RECEIVED_DETAILS_MSG));
             } catch (TelegramApiException e) {
                 LOGGER.error("Error occurred while fetching contact.");
             }
         }
 
-            if (update.getMessage().getText().equals("/start")) {
-                greet(update);
-            }
-            if (update.getMessage().getText().equals("Yes")) {
-                getContact(update);
-            }
+        if (update.getMessage().getText().equals("/start")) {
+            greet(update);
+        }
+        if (update.getMessage().getText().equals("Yes")) {
+            getContact(update);
+        }
     }
 
     /**
@@ -115,8 +120,8 @@ public class TestBot extends TelegramLongPollingBot {
             if (update.hasMessage() && update.getMessage().hasText()) {
                 SendMessage message = new SendMessage();
                 StringBuilder msgBuilder = new StringBuilder();
-                msgBuilder.append("Greetings ").append(update.getMessage().getFrom().getFirstName()).append(" !");
-                msgBuilder.append("\n Please connect with us by sharing your contact number.");
+                msgBuilder.append(Messages.GREETINGS).append(update.getMessage().getFrom().getFirstName()).append(" !");
+                msgBuilder.append(Messages.REQUEST_CONTACT_MSG);
                 message.setText(String.valueOf(msgBuilder));
                 setButtons(message);
                 message.setChatId(update.getMessage().getChatId());
@@ -175,7 +180,7 @@ public class TestBot extends TelegramLongPollingBot {
 
             SendMessage sendMessage = new SendMessage()
                     .setChatId(chat_id)
-                    .setText("Waiting for contact....");
+                    .setText(Messages.WAIT_FOR_CONTACT_MSG);
 
             ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -187,7 +192,7 @@ public class TestBot extends TelegramLongPollingBot {
 
             KeyboardRow keyboardFirstRow = new KeyboardRow();
             KeyboardButton keyboardButton = new KeyboardButton();
-            keyboardButton.setText("Click to share your contact number !").setRequestContact(true);
+            keyboardButton.setText(Messages.CONTACT_BUTTON_MSG).setRequestContact(true);
             keyboardFirstRow.add(keyboardButton);
 
             keyboard.add(keyboardFirstRow);
@@ -212,28 +217,28 @@ public class TestBot extends TelegramLongPollingBot {
         try {
             execute(new SendMessage()
                     .setChatId(update.getMessage().getChatId())
-                    .setText("Thank you, kindly share your location as well. "));
+                    .setText(Messages.REQUEST_LOCATION_MSG));
 
             long chat_id = update.getMessage().getChatId();
             SendMessage sendMessage = new SendMessage()
                     .setChatId(chat_id)
-                    .setText("Waiting for location....");
+                    .setText(Messages.WAIT_FOR_LOCATION_MSG);
 
             ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(true);
+            sendMessage.setReplyMarkup(replyKeyboardMarkup);
+            replyKeyboardMarkup.setSelective(true);
+            replyKeyboardMarkup.setResizeKeyboard(true);
+            replyKeyboardMarkup.setOneTimeKeyboard(true);
 
-        List<KeyboardRow> keyboard = new ArrayList<>();
+            List<KeyboardRow> keyboard = new ArrayList<>();
 
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        KeyboardButton keyboardButton = new KeyboardButton();
-        keyboardButton.setText("Click to share your location !").setRequestLocation(true);
-        keyboardFirstRow.add(keyboardButton);
+            KeyboardRow keyboardFirstRow = new KeyboardRow();
+            KeyboardButton keyboardButton = new KeyboardButton();
+            keyboardButton.setText(Messages.LOCATION_BUTTON_MSG).setRequestLocation(true);
+            keyboardFirstRow.add(keyboardButton);
 
-        keyboard.add(keyboardFirstRow);
-        replyKeyboardMarkup.setKeyboard(keyboard);
+            keyboard.add(keyboardFirstRow);
+            replyKeyboardMarkup.setKeyboard(keyboard);
 
             execute(sendMessage);
         } catch (TelegramApiException e) {

@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -45,6 +46,18 @@ public class StartCommand extends BotCommand {
 
         String userName = user.getFirstName() + " " + user.getLastName();
 
+        messageBuilder.append("\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\n\n");
+        messageBuilder.append("\uD83D\uDC4B ").append(Messages.WELCOME).append(userName).append("! \uD83D\uDC4B \n\n ");
+        messageBuilder.append(Messages.WELCOME_MSG1).append("\n\n");
+        messageBuilder.append(Messages.WELCOME_MSG2).append("\n\n");
+
+        for (IBotCommand botCommand : commandRegistry.getRegisteredCommands()) {
+            messageBuilder.append(botCommand.toString()).append("\n\n");
+        }
+
+        messageBuilder.append("\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E");
+
+
         messageBuilder.append(
                 "🤗".repeat(10))
                 .append("\n\n")
@@ -57,6 +70,7 @@ public class StartCommand extends BotCommand {
         for (IBotCommand botCommand : commandRegistry.getRegisteredCommands()) {
             messageBuilder.append("→").append(botCommand.toString()).append("\n\n");
         }
+
 
         SendMessage answer = new SendMessage();
         answer.setChatId(chat.getId().toString());

@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.Messages;
 import com.impacthub.bot.services.authorisation.AuthorisationService;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -45,12 +46,12 @@ public class JoinCommand extends BotCommand {
 
         // TODO with optional
         if (phoneNumber == null) {
-            messageTextBuilder.append("\nYou are not authorised to perform this action.\nKindly use /authenticate to authenticate yourself.");
+            messageTextBuilder.append(Messages.ILLEGAL_ACTION);
             answer.setText(messageTextBuilder.toString());
         } else {
             InlineKeyboardMarkup inlineKeyboardMarkup = getInlineKeyboardMarkup();
             answer.setReplyMarkup(inlineKeyboardMarkup);
-            answer.setText("Please choose an option");
+            answer.setText(Messages.GROUP_JOIN_OPTIONS_MSG);
         }
 
         answer.setChatId(chat.getId().toString());

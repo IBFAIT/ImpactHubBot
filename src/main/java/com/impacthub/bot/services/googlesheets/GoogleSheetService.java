@@ -1,14 +1,11 @@
 package com.impacthub.bot.services.googlesheets;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
+import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.impacthub.bot.services.Constants;
 import com.impacthub.bot.services.Service;
@@ -18,15 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static com.google.api.services.sheets.v4.SheetsScopes.SPREADSHEETS;
 import static com.impacthub.bot.services.Constants.DEFAULT_MEMBERSHIP;
 import static com.impacthub.bot.services.googlesheets.Columns.*;
-import static java.util.List.of;
 
 /**
  * Services for DB interaction
@@ -41,38 +36,17 @@ public class GoogleSheetService implements Service {
     private final String spreadSheetId;
 
     /**
-     * Create Service to Connect to Google SpreadSheet. Create GoogleAuthorization flow using GoogleClientSecrets object
+     * Create Service to Connect to Google SpreadSheet.
      *
      * @param spreadSheetId Spreadheet's ID
      * @throws ServiceException when an error occurs.
      */
-    public GoogleSheetService(String spreadSheetId) throws ServiceException {
+    public GoogleSheetService(String spreadSheetId) throws ServiceException, IOException {
         super();
         this.spreadSheetId = spreadSheetId;
 
-        InputStream in = GoogleSheetService.class.getResourceAsStream("/credentials.json");
-        GoogleClientSecrets clientSecrets;
-        try {
-            clientSecrets = GoogleClientSecrets.load(
-                    JacksonFactory.getDefaultInstance(), new InputStreamReader(in));
-
-
-            List<String> scopes = of(SPREADSHEETS);
-
-            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                    GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(),
-                    clientSecrets, scopes)
-                    .setDataStoreFactory(new FileDataStoreFactory(new java.io.File("tokens")))
-                    .setAccessType("offline")
-                    .build();
-
-            credential = new AuthorizationCodeInstalledApp(
-                    flow, new LocalServerReceiver())
-                    .authorize("user");
-
-        } catch (IOException | GeneralSecurityException e) {
-            throw new ServiceException(e);
-        }
+        InputStream is = GoogleSheetService.class.getResourceAsStream("/service-account-credentials.json");
+        credential = GoogleCredential.fromStream(is).createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
 
     }
 
@@ -240,4 +214,5 @@ public class GoogleSheetService implements Service {
     public Date getMembershipExpirationDate(int userId) {
         return new Date();
     }
+
 }

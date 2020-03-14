@@ -1,5 +1,6 @@
 package com.impacthub.bot.bots.commands;
 
+import com.impacthub.bot.services.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -12,7 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 /**
  * This command simply replies with a hello to the users command and
  * sends them the 'kind' words back, which they send via command parameters.
- *
  */
 public class HelloCommand extends BotCommand {
 
@@ -44,7 +44,7 @@ public class HelloCommand extends BotCommand {
         StringBuilder messageTextBuilder = new StringBuilder("Hello ").append(userName);
         if (arguments != null && arguments.length > 0) {
             messageTextBuilder.append("\n");
-            messageTextBuilder.append("Thank you so much for your kind words:\n");
+            messageTextBuilder.append(Messages.ARGS_RECEIVED_MSG);
             messageTextBuilder.append(String.join(" ", arguments));
         }
 

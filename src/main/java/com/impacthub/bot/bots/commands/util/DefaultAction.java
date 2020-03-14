@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 /**
  * Default action when user starts interacting with the bot.
  */
-public class DefaultAction implements BiConsumer<AbsSender, Message> {
+public class DefaultAction implements BiConsumer<AbsSender, Message>{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAction.class);
     private final HelpCommand helpCommand;
@@ -42,6 +42,7 @@ public class DefaultAction implements BiConsumer<AbsSender, Message> {
         } catch (TelegramApiException e) {
             LOGGER.error("Error occurred while executing default action.", e);
         }
+
         helpCommand.execute(absSender, message.getFrom(), message.getChat(), new String[]{});
     }
 }
