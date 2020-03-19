@@ -1,1 +1,1 @@
-worker: java -jar target/impacthub-telegram-bot.jar
+worker: sh target/bin/worker

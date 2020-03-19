@@ -168,26 +168,24 @@
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <assembleDirectory>target</assembleDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>com.impacthub.bot.Application</mainClass>
+                            <name>worker</name>
+                        </program>
+                    </programs>
+                </configuration>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
+                        <phase>package</phase><goals><goal>assemble</goal></goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>--add-opens</argument>
-                        <argument>java.base/java.lang=ALL-UNNAMED</argument>
-                        <argument>-classpath</argument>
-                        <classpath/>
-                        <argument>com.impacthub.bot.Application</argument>
-                    </arguments>
-                </configuration>
             </plugin>
+
         </plugins>
     </build>
 
