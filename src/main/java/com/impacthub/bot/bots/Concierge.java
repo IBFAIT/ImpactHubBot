@@ -22,13 +22,15 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.Duration;
 
+import static com.impacthub.bot.services.Constants.DEFAULT_MEMBERSHIP;
+
 /**
  * This bot manages User authentication and membership purchase options
  */
 
 public class Concierge extends TelegramLongPollingCommandBot {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Concierge.class);
+    private static final Logger log = LoggerFactory.getLogger(Concierge.class);
 
     private final String botToken;
 
@@ -108,13 +110,13 @@ public class Concierge extends TelegramLongPollingCommandBot {
                         kickChatMember(message.getChatId(), message.getFrom().getId().toString());
                     } else {
                         String membership = authorisationService.getMembership(contact);
-                        if (membership.equals(Constants.DEFAULT_MEMBERSHIP)) {
+                        if (membership.equals(DEFAULT_MEMBERSHIP)) {
                             kickChatMember(message.getChatId(), message.getFrom().getId().toString());
                         }
                     }
                 }
             } catch (ServiceException e) {
-                LOGGER.error("Error occurred while validating newly joined user {}", update.getMessage().getFrom().getFirstName(), e);
+                log.error("Error occurred while validating newly joined user {}", update.getMessage().getFrom().getFirstName(), e);
             }
 
         }
@@ -145,7 +147,7 @@ public class Concierge extends TelegramLongPollingCommandBot {
                 messageText += Messages.UNAUTHORISED_MSG;
             }
         } catch (ServiceException e) {
-            LOGGER.error("Error while authorising by contact number : {}. Notification sent to User", contact.getPhoneNumber(), e);
+            log.error("Error while authorising by contact number : {}. Notification sent to User", contact.getPhoneNumber(), e);
             messageText = Constants.ERROR_MESSAGE;
         }
 
@@ -154,9 +156,9 @@ public class Concierge extends TelegramLongPollingCommandBot {
                 messageText);
         try {
             execute(contactMessage);
-            LOGGER.info("Sent message : '{}' to Phone : {}", messageText, contact.getPhoneNumber());
+            log.info("Sent message : '{}' to Phone : {}", messageText, contact.getPhoneNumber());
         } catch (TelegramApiException e) {
-            LOGGER.error("Error while sending response after receiving contact number : {}", contact.getPhoneNumber(), e);
+            log.error("Error while sending response after receiving contact number : {}", contact.getPhoneNumber(), e);
         }
     }
 
@@ -167,6 +169,25 @@ public class Concierge extends TelegramLongPollingCommandBot {
      * @param message User's Message object
      */
     private void processTextMessage(Message message) {
+        log.debug("message.getChatId() = " + message.getChatId());
+
+        log.debug("message.getChat().getInviteLink() = " + message.getChat().getInviteLink());
+
+        log.debug("message.getFrom().getId() = " + message.getFrom().getId());
+        log.debug("message.getFrom().getCanJoinGroups() = " + message.getFrom().getCanJoinGroups());
+        log.debug("message.getChat().isChannelChat() = " + message.getChat().isChannelChat());
+        log.debug("message.getChat().isGroupChat() = " + message.getChat().isGroupChat());
+        log.debug("message.getChat().isSuperGroupChat() = " + message.getChat().isSuperGroupChat());
+
+        log.debug("message.getChat().isUserChat() = " + message.getChat().isUserChat());
+
+//        UnbanChatMember ucm = new UnbanChatMember("-1001243160013", 1063373308);
+//        try {
+//            execute(ucm);
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
+
         if (!message.hasText()) return;
 
         SendMessage echoMessage = new SendMessage();
@@ -175,9 +196,9 @@ public class Concierge extends TelegramLongPollingCommandBot {
 
         try {
             execute(echoMessage);
-            LOGGER.info("Sent message : '{}' to Chat ID : {}", echoMessage.getText(), message.getChatId());
+            log.debug("Sent message : '{}' to Chat ID : {}", echoMessage.getText(), message.getChatId());
         } catch (TelegramApiException e) {
-            LOGGER.error("Error while processing text message", e);
+            log.error("Error while processing text message", e);
         }
     }
 
@@ -205,13 +226,13 @@ public class Concierge extends TelegramLongPollingCommandBot {
         kickChatMember.setUserId(Integer.valueOf(userId));
         kickChatMember.forTimePeriod(Duration.ofMinutes(1));
 
-        try {
-            execute(kickChatMember);
-        } catch (TelegramApiException e) {
-            LOGGER.error("Error occurred while banning unauthorised User {}", userId, e);
-        }
+     //   try {
+        //    execute(kickChatMember);
+    //    } catch (TelegramApiException e) {
+       //     LOGGER.error("Error occurred while banning unauthorised User {}", userId, e);
+     //   }
 
-        LOGGER.info("Unauthorized User {} banned from joining", userId);
+        log.info("Unauthorized User {} banned from joining", userId);
     }
 
 }

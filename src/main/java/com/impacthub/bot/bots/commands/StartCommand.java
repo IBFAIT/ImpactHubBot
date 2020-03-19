@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import static com.impacthub.bot.services.Messages.*;
+
 /**
  * Starts the conversation with the bot.
  * Welcomes User with a welcome message and informs what ImpactHub bot offers.
@@ -46,31 +48,14 @@ public class StartCommand extends BotCommand {
 
         String userName = user.getFirstName() + " " + user.getLastName();
 
-        messageBuilder.append("\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\uD83E\uDD17\n\n");
-        messageBuilder.append("\uD83D\uDC4B ").append(Messages.WELCOME).append(userName).append("! \uD83D\uDC4B \n\n ");
-        messageBuilder.append(Messages.WELCOME_MSG1).append("\n\n");
-        messageBuilder.append(Messages.WELCOME_MSG2).append("\n\n");
+        messageBuilder
+                .append("👋 ").append(WELCOME).append(userName).append("! 👋\n\n ")
+                .append("⭐").append(WELCOME_MSG1).append("⭐\n\n")
+                .append(WELCOME_MSG2).append("\n\n");
 
         for (IBotCommand botCommand : commandRegistry.getRegisteredCommands()) {
             messageBuilder.append(botCommand.toString()).append("\n\n");
         }
-
-        messageBuilder.append("\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E\uDD14\uD83E");
-
-
-        messageBuilder.append(
-                "🤗".repeat(10))
-                .append("\n\n")
-                .append("👋 Welcome ").append(userName).append("! 👋\n\n ")
-                .append("⭐ I'm your <b>Concierge</b> at Impact Hub Zurich.⭐ \n\n")
-                .append("🤗".repeat(10))
-                .append("\n\n")
-                .append("This is what I can offer you right now:\n\n");
-
-        for (IBotCommand botCommand : commandRegistry.getRegisteredCommands()) {
-            messageBuilder.append("→").append(botCommand.toString()).append("\n\n");
-        }
-
 
         SendMessage answer = new SendMessage();
         answer.setChatId(chat.getId().toString());

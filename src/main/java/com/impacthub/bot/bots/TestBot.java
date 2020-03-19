@@ -1,6 +1,5 @@
 package com.impacthub.bot.bots;
 
-import com.impacthub.bot.services.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -15,6 +14,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.impacthub.bot.services.Messages.*;
 
 /**
  * Bots requests for User's phone number and location.
@@ -55,11 +56,7 @@ public class TestBot extends TelegramLongPollingBot {
 
         if (update.getMessage().getContact() != null) {
             Contact contact = update.getMessage().getContact();
-            try {
-                getLocation(update);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+            getLocation(update);
         }
 
         if (update.getMessage().getLocation() != null) {
@@ -68,7 +65,7 @@ public class TestBot extends TelegramLongPollingBot {
             try {
                 execute(new SendMessage()
                         .setChatId(update.getMessage().getChatId())
-                        .setText(Messages.RECEIVED_DETAILS_MSG));
+                        .setText(RECEIVED_DETAILS_MSG));
             } catch (TelegramApiException e) {
                 LOGGER.error("Error occurred while fetching contact.");
             }
@@ -101,14 +98,6 @@ public class TestBot extends TelegramLongPollingBot {
         return botToken;
     }
 
-
-    public void sendMessage(Update update) throws TelegramApiException {
-        SendMessage message = new SendMessage();
-        message.setChatId(update.getMessage().getChatId());
-        message.setText("");
-        execute(message);
-    }
-
     /**
      * Welcome message for the User
      *
@@ -120,8 +109,8 @@ public class TestBot extends TelegramLongPollingBot {
             if (update.hasMessage() && update.getMessage().hasText()) {
                 SendMessage message = new SendMessage();
                 StringBuilder msgBuilder = new StringBuilder();
-                msgBuilder.append(Messages.GREETINGS).append(update.getMessage().getFrom().getFirstName()).append(" !");
-                msgBuilder.append(Messages.REQUEST_CONTACT_MSG);
+                msgBuilder.append(GREETINGS).append(update.getMessage().getFrom().getFirstName()).append(" !");
+                msgBuilder.append(REQUEST_CONTACT_MSG);
                 message.setText(String.valueOf(msgBuilder));
                 setButtons(message);
                 message.setChatId(update.getMessage().getChatId());
@@ -180,7 +169,7 @@ public class TestBot extends TelegramLongPollingBot {
 
             SendMessage sendMessage = new SendMessage()
                     .setChatId(chat_id)
-                    .setText(Messages.WAIT_FOR_CONTACT_MSG);
+                    .setText(WAIT_FOR_CONTACT_MSG);
 
             ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -192,7 +181,7 @@ public class TestBot extends TelegramLongPollingBot {
 
             KeyboardRow keyboardFirstRow = new KeyboardRow();
             KeyboardButton keyboardButton = new KeyboardButton();
-            keyboardButton.setText(Messages.CONTACT_BUTTON_MSG).setRequestContact(true);
+            keyboardButton.setText(CONTACT_BUTTON_MSG).setRequestContact(true);
             keyboardFirstRow.add(keyboardButton);
 
             keyboard.add(keyboardFirstRow);
@@ -217,12 +206,12 @@ public class TestBot extends TelegramLongPollingBot {
         try {
             execute(new SendMessage()
                     .setChatId(update.getMessage().getChatId())
-                    .setText(Messages.REQUEST_LOCATION_MSG));
+                    .setText(REQUEST_LOCATION_MSG));
 
             long chat_id = update.getMessage().getChatId();
             SendMessage sendMessage = new SendMessage()
                     .setChatId(chat_id)
-                    .setText(Messages.WAIT_FOR_LOCATION_MSG);
+                    .setText(WAIT_FOR_LOCATION_MSG);
 
             ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -234,7 +223,7 @@ public class TestBot extends TelegramLongPollingBot {
 
             KeyboardRow keyboardFirstRow = new KeyboardRow();
             KeyboardButton keyboardButton = new KeyboardButton();
-            keyboardButton.setText(Messages.LOCATION_BUTTON_MSG).setRequestLocation(true);
+            keyboardButton.setText(LOCATION_BUTTON_MSG).setRequestLocation(true);
             keyboardFirstRow.add(keyboardButton);
 
             keyboard.add(keyboardFirstRow);

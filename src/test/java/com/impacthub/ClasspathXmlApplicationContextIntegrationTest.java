@@ -16,7 +16,7 @@ public class ClasspathXmlApplicationContextIntegrationTest {
 
         String enHello = resources.getMessage("hello", null, "Default", Locale.ENGLISH);
         String enYou = resources.getMessage("you", null, Locale.ENGLISH);
-        String enThanks = resources.getMessage("thanks", new Object[] { enYou }, Locale.ENGLISH);
+        String enThanks = resources.getMessage("thanks", new Object[]{enYou}, Locale.ENGLISH);
 
 
         assertEquals("hello", enHello);
@@ -24,7 +24,7 @@ public class ClasspathXmlApplicationContextIntegrationTest {
 
         String chHello = resources.getMessage("hello", null, "Default", Locale.SIMPLIFIED_CHINESE);
         String chYou = resources.getMessage("you", null, Locale.SIMPLIFIED_CHINESE);
-        String chThanks = resources.getMessage("thanks", new Object[] { chYou }, Locale.SIMPLIFIED_CHINESE);
+        String chThanks = resources.getMessage("thanks", new Object[]{chYou}, Locale.SIMPLIFIED_CHINESE);
 
         assertEquals("你好", chHello);
         assertEquals("谢谢你", chThanks);

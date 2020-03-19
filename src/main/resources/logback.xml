@@ -8,7 +8,9 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="CONSOLE"/>
     </root>
+
+    <logger name="com.impacthub" level="DEBUG" />
 
 </configuration>

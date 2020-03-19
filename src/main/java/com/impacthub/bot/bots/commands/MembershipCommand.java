@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Date;
 
 import static com.impacthub.bot.services.Constants.*;
+import static com.impacthub.bot.services.Messages.ILLEGAL_ACTION;
 
 /**
  * Responsible for fetching membership details of the User.
@@ -67,7 +68,7 @@ public class MembershipCommand extends BotCommand {
                     message.setText(NO_MEMBERSHIP);
                 }
             } else {
-                message.setText(String.format(Messages.ILLEGAL_ACTION, this.getCommandIdentifier()));
+                message.setText(String.format(ILLEGAL_ACTION, this.getCommandIdentifier()));
             }
 
             absSender.execute(message);
