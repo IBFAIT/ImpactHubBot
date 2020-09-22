@@ -1,10 +1,11 @@
 package com.impacthub.bot.bots;
 
 import com.impacthub.bot.services.authorisation.AuthorisationService;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConciergeTest {
 
@@ -18,6 +19,6 @@ public class ConciergeTest {
         authService.registerUser(4242, "2424");
 
         String phoneNumber = concierge.getPhoneNumberFromUserId(4242);
-        Assert.assertEquals("2424", phoneNumber);
+        assertEquals("2424", phoneNumber);
     }
 }

@@ -16,37 +16,31 @@ import java.util.List;
  */
 public class Application {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     /**
      * Registers bots with Telegram API
      *
      * @param args Command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TelegramApiRequestException {
 
-        LOGGER.info("Starting bot ...");
+        log.info("Starting bot ...");
 
-        try {
-            ApiContextInitializer.init();
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+        ApiContextInitializer.init();
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 
-            ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
 
-            List<LongPollingBot> bots = (List<LongPollingBot>) context.getBean("bots");
+        List<LongPollingBot> bots = (List<LongPollingBot>) context.getBean("bots");
 
-            for (Object obj : bots) {
-                LongPollingBot bot = (LongPollingBot) obj;
-                try {
-                    telegramBotsApi.registerBot(bot);
-                } catch (TelegramApiRequestException e) {
-                    LOGGER.error("Error while registering Bot.", e);
-                }
-            }
+        for (Object obj : bots) {
+            LongPollingBot bot = (LongPollingBot) obj;
 
-            LOGGER.info("Bot started.");
-        } catch (Exception e) {
-            LOGGER.error("Error while starting Bot.", e);
+            telegramBotsApi.registerBot(bot);
         }
+
+        log.info("Bot started.");
+
     }
 }

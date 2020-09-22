@@ -20,7 +20,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="db" class="com.impacthub.bot.services.db.Database"/>
+    <bean id="db" class="com.impacthub.bot.services.db.InMemoryDB"/>
 
     <bean id="helloCommand" class="com.impacthub.bot.bots.commands.HelloCommand"/>
     <bean id="startCommand" class="com.impacthub.bot.bots.commands.StartCommand"/>

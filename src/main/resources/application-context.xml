@@ -20,7 +20,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="db" class="com.impacthub.bot.services.db.Database"/>
+    <bean id="db" class="com.impacthub.bot.services.db.GoogleSheetDB"/>
 
     <bean id="helloCommand" class="com.impacthub.bot.bots.commands.HelloCommand"/>
     <bean id="startCommand" class="com.impacthub.bot.bots.commands.StartCommand"/>
@@ -59,7 +59,6 @@
         <property name="authorisationService" ref="authorisationService"/>
     </bean>
 
-
     <!--
     Name of bot: @ImpactHubContactBot
     Username of bot: ImpactHubContactBot
@@ -74,12 +73,36 @@
     <bean id="IHInlineTestBot" class="com.impacthub.bot.bots.IHInlineTestBot">
     </bean>
 
+    <bean id="bouncerBot" class="com.impacthub.bot.bots.Bouncer">
+        <constructor-arg>
+            <list>
+                <ref bean="loggingSentinelService"/>
+                <ref bean="googleSheetSentinelService"/>
+                <ref bean="userLookupService"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="loggingSentinelService" class="com.impacthub.bot.services.sentinel.SL4JLoggingService"/>
+
+    <bean id="googleSheetSentinelService" class="com.impacthub.bot.services.sentinel.GoogleSheetLoggingService"/>
+
+    <bean id="userLookupService" class="com.impacthub.bot.services.sentinel.UserLookupService">
+        <property name="authorisationService" ref="authorisationService"/>
+    </bean>
+
+
     <bean id="bots" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-                <ref bean="conciergeBot"/>
-                <ref bean="testBot"/>
-                <ref bean="IHInlineTestBot"/>
+                <!--
+                                <ref bean="conciergeBot"/>
+                                <ref bean="testBot"/>
+                                <ref bean="IHInlineTestBot"/>
+                                <ref bean="conciergeBot"/>
+                                -->
+
+                <ref bean="bouncerBot"/>
             </list>
         </constructor-arg>
     </bean>

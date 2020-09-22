@@ -27,13 +27,20 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>4.6</version>
+            <version>4.9.1</version>
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13-rc-1</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.3.3</version>
             <scope>test</scope>
         </dependency>
 
@@ -51,7 +58,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-abilities</artifactId>
-            <version>4.6</version>
+            <version>4.9.1</version>
         </dependency>
 
         <dependency>
@@ -75,7 +82,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambotsextensions</artifactId>
-            <version>4.6</version>
+            <version>4.9.1</version>
         </dependency>
 
     </dependencies>
@@ -113,7 +120,7 @@
                         <include>${project.build.directory}/${project.build.finalName}.jar</include>
                     </includes>
                     <processTypes>
-                        <web>java -jar target/${project.build.finalName}.jar</web>
+                        <bot>java -jar target/${project.build.finalName}.jar</bot>
                     </processTypes>
                 </configuration>
             </plugin>
@@ -168,24 +175,26 @@
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.1.1</version>
-                <configuration>
-                    <assembleDirectory>target</assembleDirectory>
-                    <programs>
-                        <program>
-                            <mainClass>com.impacthub.bot.Application</mainClass>
-                            <name>worker</name>
-                        </program>
-                    </programs>
-                </configuration>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
                 <executions>
                     <execution>
-                        <phase>package</phase><goals><goal>assemble</goal></goals>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>--add-opens</argument>
+                        <argument>java.base/java.lang=ALL-UNNAMED</argument>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.impacthub.bot.Application</argument>
+                    </arguments>
+                </configuration>
             </plugin>
-
         </plugins>
     </build>
 

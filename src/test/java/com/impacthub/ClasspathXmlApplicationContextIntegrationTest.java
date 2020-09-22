@@ -1,21 +1,22 @@
 package com.impacthub;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class ClasspathXmlApplicationContextIntegrationTest {
 
-    @Test
-    public void testInternationalization() {
-        MessageSource resources = new ClassPathXmlApplicationContext("internationalization.xml");
+  @Test
+  public void testInternationalization() {
+    MessageSource resources = new ClassPathXmlApplicationContext("internationalization.xml");
 
-        String enHello = resources.getMessage("hello", null, "Default", Locale.ENGLISH);
-        String enYou = resources.getMessage("you", null, Locale.ENGLISH);
+    String enHello = resources.getMessage("hello", null, "Default", Locale.ENGLISH);
+    String enYou = resources.getMessage("you", null, Locale.ENGLISH);
         String enThanks = resources.getMessage("thanks", new Object[]{enYou}, Locale.ENGLISH);
 
 

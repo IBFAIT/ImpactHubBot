@@ -78,3 +78,26 @@ Date : 28/02/2020
 ### Functionality Upgrade ###
     Gateway Bot now can be searched(IH_Gateway_bot) & interacted with.
     User can join the main group after authorization (Users telegram ID should exist in the DB)
+
+
+# Maven/Heroku
+
+Once you have run 
+
+`mvn clean heroku:deploy`
+
+You can use the following command to run the heroku dynos (It'll start the apps present in the dynos)
+
+`heroku ps:scale bot=1 -- To start the dyno`
+
+`heroku ps:scale bot=0 -- To stop the dyno`
+
+ADD ' -a <app_name> ' if needed
+
+The logs will display the console output of the application. You can check the logs after starting the app using
+
+`heroku logs --tail`
+
+ADD ' -a <app_name> ' if needed
+
+Eg : heroku logs --tail -a impacthub
