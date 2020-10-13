@@ -66,7 +66,6 @@ public class Concierge extends TelegramLongPollingCommandBot {
         this.authorisationService = authService;
     }
 
-
     /**
      * Returns Bot Username
      *
